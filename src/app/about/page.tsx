@@ -21,6 +21,7 @@ import {
 import Navbar from "@/components/Navbar";
 import ProfileCard from "@/components/ProfileCard";
 import SkillsSection from "@/components/SkillsSection";
+import ExperienceJourney from "@/components/ExperienceJourney";
 import { MOCK_ABOUT } from "@/data/mockAbout";
 
 export const metadata: Metadata = {
@@ -89,75 +90,7 @@ export default function AboutPage() {
         <SkillsSection categories={profile.skills} />
 
         {/* Experience Journey Section */}
-        <div className="space-y-6">
-          <div className="flex items-center gap-2">
-            <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
-              <Briefcase className="w-4 h-4" />
-            </div>
-            <div>
-              <h2 className="text-lg font-bold font-mono text-zinc-900 dark:text-zinc-100">
-                Perjalanan Pengalaman Karir
-              </h2>
-              <span className="text-xs font-mono text-zinc-400">
-                Jejak karir dan peran penting yang pernah saya emban
-              </span>
-            </div>
-          </div>
-
-          <div className="space-y-6">
-            {profile.experiences.map((exp, index) => (
-              <div
-                key={exp.id}
-                className="relative rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/60 p-6 sm:p-8 shadow-sm backdrop-blur-md"
-              >
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3 pb-3 border-b border-zinc-100 dark:border-zinc-800/80 font-mono">
-                  <div>
-                    <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100">
-                      {exp.role}
-                    </h3>
-                    <span className="text-xs text-emerald-600 dark:text-emerald-400 font-medium">
-                      {exp.company} {exp.location ? `• ${exp.location}` : ""}
-                    </span>
-                  </div>
-
-                  <span className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 self-start sm:self-auto">
-                    <Calendar className="w-3.5 h-3.5 text-emerald-500" />
-                    {exp.period}
-                  </span>
-                </div>
-
-                <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed mb-4">
-                  {exp.summary}
-                </p>
-
-                <div className="space-y-2 mb-4">
-                  <span className="text-[11px] font-mono font-bold text-zinc-500 uppercase tracking-wider block">
-                    Pencapaian Kunci:
-                  </span>
-                  <ul className="space-y-1.5 text-xs sm:text-sm text-zinc-700 dark:text-zinc-300">
-                    {exp.contributions.map((item, i) => (
-                      <li key={i} className="flex items-start gap-2">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="flex flex-wrap gap-1.5 pt-3 border-t border-zinc-100 dark:border-zinc-800/60">
-                  {exp.technologies.map((t) => (
-                    <span
-                      key={t}
-                      className="font-mono text-[11px] px-2.5 py-1 rounded-md bg-zinc-100 dark:bg-zinc-950 text-zinc-600 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-800"
-                    >
-                      {t}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+        <ExperienceJourney experiences={profile.experiences} />
 
         {/* Education Section */}
         <div className="space-y-4">
