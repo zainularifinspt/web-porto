@@ -184,3 +184,35 @@ export interface ContactMessageUpdate {
   status?: ContactMessageStatus;
   notes?: string | null;
 }
+
+export interface AdminUserRow {
+  id: string;
+  email: string;
+  password_hash: string;
+  salt: string;
+  name: string;
+  role: "owner" | "admin";
+  avatar_url?: string | null;
+  last_login_at?: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface AdminUserInsert {
+  email: string;
+  password_hash: string;
+  salt: string;
+  name: string;
+  role?: "owner" | "admin";
+  avatar_url?: string | null;
+}
+
+export interface AdminSessionRow {
+  id: string;
+  user_id: string;
+  token: string;
+  ip_address?: string | null;
+  user_agent?: string | null;
+  expires_at: string;
+  created_at: string;
+}
