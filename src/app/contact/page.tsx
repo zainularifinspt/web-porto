@@ -18,6 +18,7 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
+import SocialLinksList from "@/components/SocialLinksList";
 import { MOCK_CONTACT } from "@/data/mockContact";
 
 export const metadata: Metadata = {
@@ -171,6 +172,9 @@ export default function ContactPage() {
             ))}
           </div>
         </section>
+
+        {/* Social Media & Professional Network Links */}
+        <SocialLinksList links={contact.socialLinks} />
 
         {/* Developer Terminal Snippet & Security Info */}
         <section className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/60 p-6 sm:p-8 backdrop-blur-md space-y-6">
