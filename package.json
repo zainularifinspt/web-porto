@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "db:migrate": "node -e 'require(\"child_process\").execSync(\"npx tsx src/db/migrate.ts\", { stdio: \"inherit\" })'",
     "db:seed": "node -e 'console.log(\"Seed script ready at src/db/seeds/001_projects_seed.sql\")'"
   },
   "dependencies": {

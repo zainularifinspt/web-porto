@@ -10,6 +10,11 @@ export interface ProjectRow {
   thumbnail_url: string;
   is_featured: boolean;
   sort_order: number;
+  stars?: number | null;
+  status?: string | null;
+  views?: string | null;
+  architecture_notes?: string | null;
+  challenges?: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -34,6 +39,15 @@ export interface ProjectTechnologyRow {
   technology_id: string;
 }
 
+export interface ProjectFeatureRow {
+  id: string;
+  project_id: string;
+  title: string;
+  description: string;
+  sort_order: number;
+  created_at: string;
+}
+
 export interface ProjectInsert {
   title: string;
   slug: string;
@@ -45,4 +59,15 @@ export interface ProjectInsert {
   thumbnail_url: string;
   is_featured?: boolean;
   sort_order?: number;
+  stars?: number | null;
+  status?: string | null;
+  views?: string | null;
+  architecture_notes?: string | null;
+  challenges?: string | null;
+}
+
+export interface ProjectWithDetails extends ProjectRow {
+  images: ProjectImageRow[];
+  technologies: string[];
+  features?: ProjectFeatureRow[];
 }
