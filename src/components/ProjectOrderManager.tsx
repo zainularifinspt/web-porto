@@ -99,19 +99,53 @@ export default function ProjectOrderManager({
   const handleSave = async () => {
     setIsSaving(true);
 
-    // Simulate saving updated ordering
-    await new Promise((resolve) => setTimeout(resolve, 600));
+    try {
+      const payload = {
+        items: projects.map((p, index) => ({
+          id: p.id,
+          sortOrder: index + 1,
+          isFeatured: p.isFeatured,
+        })),
+      };
 
-    setIsSaving(false);
-    setToast({
-      isOpen: true,
-      type: "success",
-      title: "Perubahan Urutan Disimpan",
-      message: "Susunan urutan dan prioritas project unggulan berhasil diperbarui!",
-    });
+      const res = await fetch("/api/projects/reorder", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
 
-    if (onSave) {
-      onSave(projects);
+      const resData = await res.json();
+
+      setIsSaving(false);
+
+      if (!res.ok || !resData.success) {
+        setToast({
+          isOpen: true,
+          type: "error",
+          title: "Gagal Menyimpan",
+          message: resData.error || "Gagal memperbarui urutan project.",
+        });
+        return;
+      }
+
+      setToast({
+        isOpen: true,
+        type: "success",
+        title: "Perubahan Urutan Disimpan",
+        message: "Susunan urutan dan prioritas project unggulan berhasil disimpan ke database!",
+      });
+
+      if (onSave) {
+        onSave(projects);
+      }
+    } catch {
+      setIsSaving(false);
+      setToast({
+        isOpen: true,
+        type: "error",
+        title: "Koneksi Error",
+        message: "Gagal terhubung ke API server.",
+      });
     }
   };
 
