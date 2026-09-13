@@ -71,13 +71,6 @@ export default async function Home() {
                 <ShieldCheck className="w-3 h-3 text-emerald-500" />
                 <span>Type-Safe: 100%</span>
               </span>
-              <Link
-                href="/admin/login"
-                className="text-emerald-600 dark:text-emerald-400 hover:underline flex items-center gap-1"
-              >
-                <span>admin-portal</span>
-                <ArrowRight className="w-3 h-3" />
-              </Link>
             </div>
           </section>
         </ScrollReveal>
@@ -318,10 +311,6 @@ export default async function Home() {
             <span className="text-zinc-300 dark:text-zinc-700">•</span>
             <Link href="/contact" className="hover:text-emerald-500 transition-colors">
               kontak
-            </Link>
-            <span className="text-zinc-300 dark:text-zinc-700">•</span>
-            <Link href="/admin" className="hover:text-emerald-500 transition-colors">
-              admin-portal
             </Link>
           </div>
         </div>
