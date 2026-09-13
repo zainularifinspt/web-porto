@@ -45,6 +45,12 @@ export default function ThemeToggle() {
         ) : (
           <Moon className="w-4 h-4 text-emerald-600 dark:text-cyan-400 group-hover:-rotate-12 transition-transform duration-300" />
         )}
+        {theme === "system" && (
+          <span
+            className="absolute bottom-1 right-1 w-1.5 h-1.5 rounded-full bg-emerald-500"
+            title="Mengikuti pengaturan sistem"
+          />
+        )}
       </button>
 
       {/* Theme Choice Dropdown Menu */}

@@ -1,6 +1,6 @@
 {
   "repo": "Web Portofolio",
-  "generatedForCommit": "690e1190df6b4614d24bacbff56598beaf685db6",
+  "generatedForCommit": "8b5e8fd46ad9c24f986c06c3c76798dae4961537",
   "files": [
     {
       "path": ".claude/skills/ngodingpakeai/SKILL.md",
@@ -82,9 +82,9 @@
     },
     {
       "path": "src/app/layout.tsx",
-      "reason": "needs_summary",
+      "reason": "changed",
       "language": "typescript",
-      "size": 1867
+      "size": 1988
     },
     {
       "path": "src/app/page.tsx",
@@ -136,7 +136,7 @@
     },
     {
       "path": "src/components/ThemeToggle.tsx",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 4745
     },
