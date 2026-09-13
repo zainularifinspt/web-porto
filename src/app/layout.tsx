@@ -37,12 +37,16 @@ export default function RootLayout({
                 try {
                   var saved = localStorage.getItem('portfolio-theme');
                   var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                  if (saved === 'dark' || (!saved && prefersDark)) {
+                  if (saved === 'dark') {
                     document.documentElement.classList.add('dark');
                   } else if (saved === 'light') {
                     document.documentElement.classList.remove('dark');
-                  } else if (prefersDark) {
-                    document.documentElement.classList.add('dark');
+                  } else {
+                    if (prefersDark) {
+                      document.documentElement.classList.add('dark');
+                    } else {
+                      document.documentElement.classList.remove('dark');
+                    }
                   }
                 } catch (e) {}
               })();
