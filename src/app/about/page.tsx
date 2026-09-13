@@ -22,6 +22,7 @@ import Navbar from "@/components/Navbar";
 import ProfileCard from "@/components/ProfileCard";
 import SkillsSection from "@/components/SkillsSection";
 import ExperienceJourney from "@/components/ExperienceJourney";
+import { getAboutContent } from "@/db";
 import { MOCK_ABOUT } from "@/data/mockAbout";
 
 export const metadata: Metadata = {
@@ -29,8 +30,8 @@ export const metadata: Metadata = {
   description: `${MOCK_ABOUT.name} — ${MOCK_ABOUT.headline}. Pelajari perjalanan karir, keahlian teknis, dan filosofi pengembangan web saya.`,
 };
 
-export default function AboutPage() {
-  const profile = MOCK_ABOUT;
+export default async function AboutPage() {
+  const profile = await getAboutContent();
 
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 flex flex-col selection:bg-emerald-500 selection:text-zinc-950 transition-colors duration-200">
