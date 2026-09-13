@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import SocialLinksList from "@/components/SocialLinksList";
+import ContactMessageForm from "@/components/ContactMessageForm";
 import { MOCK_CONTACT } from "@/data/mockContact";
 
 export const metadata: Metadata = {
@@ -171,6 +172,11 @@ export default function ContactPage() {
               </div>
             ))}
           </div>
+        </section>
+
+        {/* Interactive Direct Message Form */}
+        <section id="message-form" className="space-y-4">
+          <ContactMessageForm />
         </section>
 
         {/* Social Media & Professional Network Links */}
