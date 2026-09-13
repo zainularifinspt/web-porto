@@ -60,6 +60,11 @@ export default function ProjectGallery({ initialProjects }: ProjectGalleryProps)
       }
 
       return true;
+    }).sort((a, b) => {
+      if (a.isFeatured !== b.isFeatured) {
+        return b.isFeatured ? 1 : -1;
+      }
+      return a.sortOrder - b.sortOrder;
     });
   }, [initialProjects, activeFilter, searchQuery]);
 

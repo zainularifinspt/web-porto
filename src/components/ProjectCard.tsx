@@ -19,10 +19,15 @@ export default function ProjectCard({ project }: ProjectCardProps) {
     <article
       className={cn(
         "group relative flex flex-col rounded-xl overflow-hidden border transition-all duration-300",
-        "bg-zinc-900/80 hover:bg-zinc-900 border-zinc-800/80 hover:border-emerald-500/50 hover:shadow-2xl hover:shadow-emerald-950/30",
-        project.isFeatured && "ring-1 ring-emerald-500/20"
+        "bg-zinc-900/80 hover:bg-zinc-900 border-zinc-800/80 hover:border-emerald-500/50 hover:shadow-2xl hover:shadow-emerald-950/40",
+        project.isFeatured && "border-emerald-500/30 ring-1 ring-emerald-500/30 shadow-lg shadow-emerald-950/20"
       )}
     >
+      {/* Featured Top Highlight Bar */}
+      {project.isFeatured && (
+        <div className="h-0.5 w-full bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-400" />
+      )}
+
       {/* Terminal Title Bar */}
       <div className="flex items-center justify-between px-3.5 py-2 border-b border-zinc-800 bg-zinc-950/60 text-xs font-mono text-zinc-400">
         <div className="flex items-center space-x-1.5">
@@ -35,7 +40,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
         </div>
         <div className="flex items-center space-x-2">
           {project.isFeatured && (
-            <span className="flex items-center gap-1 text-[11px] font-medium text-emerald-400 bg-emerald-950/60 border border-emerald-800/50 px-2 py-0.5 rounded-full">
+            <span className="flex items-center gap-1 text-[11px] font-semibold text-emerald-300 bg-emerald-950/90 border border-emerald-600/60 px-2 py-0.5 rounded-full shadow-sm shadow-emerald-500/20 animate-pulse">
               <Star className="w-3 h-3 fill-emerald-400 text-emerald-400" />
               Unggulan
             </span>
