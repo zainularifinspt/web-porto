@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getAboutContent } from "@/db";
+import { getAboutContent, updateAboutContent } from "@/db";
 
 /**
  * GET /api/about
@@ -70,4 +70,101 @@ export async function GET(request: NextRequest) {
       { status: 500 }
     );
   }
+}
+
+/**
+ * Shared logic for updating About Me content via PUT or PATCH.
+ */
+async function handleUpdate(request: NextRequest) {
+  try {
+    let body: any;
+    try {
+      body = await request.json();
+    } catch {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Payload request bukan JSON yang valid",
+        },
+        { status: 400 }
+      );
+    }
+
+    if (!body || typeof body !== "object" || Array.isArray(body)) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Request body harus berupa objek JSON",
+        },
+        { status: 400 }
+      );
+    }
+
+    // Validation checks
+    if (body.email && typeof body.email === "string") {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(body.email)) {
+        return NextResponse.json(
+          {
+            success: false,
+            error: "Format email tidak valid",
+          },
+          { status: 400 }
+        );
+      }
+    }
+
+    if (body.bio !== undefined && !Array.isArray(body.bio)) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Field 'bio' harus berupa array string paragraf",
+        },
+        { status: 400 }
+      );
+    }
+
+    if (body.stats !== undefined && (typeof body.stats !== "object" || Array.isArray(body.stats))) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Field 'stats' harus berupa objek",
+        },
+        { status: 400 }
+      );
+    }
+
+    const updated = await updateAboutContent(body);
+
+    return NextResponse.json({
+      success: true,
+      message: "Konten Tentang Saya berhasil diperbarui",
+      data: updated,
+    });
+  } catch (error) {
+    console.error("Error updating about content:", error);
+    return NextResponse.json(
+      {
+        success: false,
+        error: "Terjadi kesalahan server saat memperbarui konten Tentang Saya",
+      },
+      { status: 500 }
+    );
+  }
+}
+
+/**
+ * PUT /api/about
+ * Replace/update about profile content.
+ */
+export async function PUT(request: NextRequest) {
+  return handleUpdate(request);
+}
+
+/**
+ * PATCH /api/about
+ * Partially update about profile content.
+ */
+export async function PATCH(request: NextRequest) {
+  return handleUpdate(request);
 }

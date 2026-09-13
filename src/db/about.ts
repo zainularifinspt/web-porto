@@ -28,7 +28,7 @@ export async function getAboutContent(): Promise<AboutProfile> {
  * Updates About Me profile fields.
  */
 export async function updateAboutContent(
-  updates: Partial<AboutProfile> | AboutProfileUpdate
+  updates: Record<string, any>
 ): Promise<AboutProfile> {
   if (process.env.DATABASE_URL) {
     try {
@@ -38,18 +38,26 @@ export async function updateAboutContent(
     }
   }
 
-  // Deep clone and merge updates
+  // Deep clone and merge updates with support for both snake_case and camelCase
   currentAboutState = {
     ...currentAboutState,
-    ...updates,
+    name: updates.name ?? currentAboutState.name,
+    headline: updates.headline ?? currentAboutState.headline,
+    bio: Array.isArray(updates.bio) ? updates.bio : currentAboutState.bio,
+    photoUrl: updates.photoUrl ?? updates.photo_url ?? currentAboutState.photoUrl,
+    avatarFallback: updates.avatarFallback ?? updates.avatar_fallback ?? currentAboutState.avatarFallback,
+    status: updates.status ?? currentAboutState.status,
+    location: updates.location ?? currentAboutState.location,
+    email: updates.email ?? currentAboutState.email,
+    githubUrl: updates.githubUrl ?? updates.github_url ?? currentAboutState.githubUrl,
+    linkedinUrl: updates.linkedinUrl ?? updates.linkedin_url ?? currentAboutState.linkedinUrl,
     stats: {
       ...currentAboutState.stats,
       ...(updates.stats || {}),
     },
-    bio: updates.bio || currentAboutState.bio,
-    skills: (updates as any).skills || currentAboutState.skills,
-    experiences: (updates as any).experiences || currentAboutState.experiences,
-    education: (updates as any).education || currentAboutState.education,
+    skills: Array.isArray(updates.skills) ? updates.skills : currentAboutState.skills,
+    experiences: Array.isArray(updates.experiences) ? updates.experiences : currentAboutState.experiences,
+    education: Array.isArray(updates.education) ? updates.education : currentAboutState.education,
   };
 
   return currentAboutState;
