@@ -86,28 +86,28 @@ export default async function ProjectDetailPage({ params }: PageProps) {
 
       <main className="flex-1 max-w-5xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-10 space-y-10">
         {/* Breadcrumb Navigation & Branch info */}
-        <div className="flex flex-wrap items-center justify-between gap-4 font-mono text-xs">
+        <div className="flex flex-wrap items-center justify-between gap-3 font-mono text-xs">
           <Link
             href="/#projects"
             className="inline-flex items-center gap-2 text-zinc-600 dark:text-zinc-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors p-2 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-900 border border-transparent hover:border-zinc-200 dark:hover:border-zinc-800"
           >
-            <ArrowLeft className="w-4 h-4" />
-            cd .. / Galeri Project
+            <ArrowLeft className="w-4 h-4 shrink-0" />
+            <span>cd .. / Galeri Project</span>
           </Link>
 
-          <div className="flex items-center gap-3 text-zinc-500 dark:text-zinc-400">
-            <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800">
-              <GitBranch className="w-3.5 h-3.5 text-emerald-500" />
+          <div className="flex items-center gap-2 text-zinc-500 dark:text-zinc-400 text-[11px] sm:text-xs">
+            <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shrink-0">
+              <GitBranch className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
               main@{project.slug.slice(0, 7)}
             </span>
-            <span className="hidden sm:inline-block">
+            <span className="hidden md:inline-block truncate max-w-xs">
               ~/portfolio/projects/{project.slug}.md
             </span>
           </div>
         </div>
 
         {/* Project Header Banner Card */}
-        <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/70 p-6 sm:p-8 backdrop-blur-xl shadow-sm dark:shadow-2xl">
+        <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/70 p-5 sm:p-8 backdrop-blur-xl shadow-sm dark:shadow-2xl">
           <div className="flex flex-wrap items-center gap-2 mb-4">
             {project.isFeatured && (
               <span className="flex items-center gap-1.5 text-xs font-mono font-semibold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/80 border border-emerald-300 dark:border-emerald-700/50 px-3 py-1 rounded-full shadow-sm">
@@ -121,25 +121,25 @@ export default async function ProjectDetailPage({ params }: PageProps) {
             </span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl font-bold font-mono text-zinc-900 dark:text-zinc-100 mb-4 tracking-tight">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold font-mono text-zinc-900 dark:text-zinc-100 mb-4 tracking-tight break-words">
             {project.title}
           </h1>
 
-          <p className="text-base sm:text-lg text-zinc-700 dark:text-zinc-300 leading-relaxed mb-6">
+          <p className="text-sm sm:text-base lg:text-lg text-zinc-700 dark:text-zinc-300 leading-relaxed mb-6">
             {project.summary}
           </p>
 
           {/* Quick Meta Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-6 border-t border-zinc-200 dark:border-zinc-800/80 text-xs font-mono">
-            <div>
+          <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 pt-6 border-t border-zinc-200 dark:border-zinc-800/80 text-xs font-mono">
+            <div className="p-3 rounded-xl bg-zinc-50 dark:bg-zinc-950/50 sm:bg-transparent sm:dark:bg-transparent sm:p-0 border sm:border-0 border-zinc-200/60 dark:border-zinc-800/60">
               <span className="text-zinc-500 dark:text-zinc-400 block mb-1 flex items-center gap-1.5">
-                <UserCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> Peran Utama
+                <UserCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" /> Peran Utama
               </span>
-              <span className="font-semibold text-zinc-800 dark:text-zinc-200">{project.role}</span>
+              <span className="font-semibold text-zinc-800 dark:text-zinc-200 break-words">{project.role}</span>
             </div>
-            <div>
+            <div className="p-3 rounded-xl bg-zinc-50 dark:bg-zinc-950/50 sm:bg-transparent sm:dark:bg-transparent sm:p-0 border sm:border-0 border-zinc-200/60 dark:border-zinc-800/60">
               <span className="text-zinc-500 dark:text-zinc-400 block mb-1 flex items-center gap-1.5">
-                <Calendar className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> Tanggal Rilis
+                <Calendar className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" /> Tanggal Rilis
               </span>
               <span className="font-semibold text-zinc-800 dark:text-zinc-200">
                 {new Date(project.createdAt).toLocaleDateString("id-ID", {
@@ -148,9 +148,9 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                 })}
               </span>
             </div>
-            <div className="col-span-2 sm:col-span-1">
+            <div className="p-3 rounded-xl bg-zinc-50 dark:bg-zinc-950/50 sm:bg-transparent sm:dark:bg-transparent sm:p-0 border sm:border-0 border-zinc-200/60 dark:border-zinc-800/60 xs:col-span-2 sm:col-span-1">
               <span className="text-zinc-500 dark:text-zinc-400 block mb-1 flex items-center gap-1.5">
-                <Layers className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> Total Teknologi
+                <Layers className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" /> Total Teknologi
               </span>
               <span className="font-semibold text-zinc-800 dark:text-zinc-200">
                 {project.technologies.length} Stack Terintegrasi
@@ -210,43 +210,45 @@ export default async function ProjectDetailPage({ params }: PageProps) {
         </div>
 
         {/* Project Navigation Footer (Prev / Next) */}
-        <div className="pt-8 border-t border-zinc-200 dark:border-zinc-800/80 flex items-center justify-between gap-4 font-mono text-xs">
+        <div className="pt-8 border-t border-zinc-200 dark:border-zinc-800/80 grid grid-cols-1 sm:grid-cols-3 gap-3 items-center font-mono text-xs">
           {prevProject ? (
             <Link
               href={`/project/${prevProject.slug}`}
-              className="flex items-center gap-2 p-3 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-900 border border-transparent hover:border-zinc-200 dark:hover:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+              className="flex items-center gap-2.5 p-3 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors group"
             >
-              <ArrowLeft className="w-4 h-4" />
-              <span>
+              <ArrowLeft className="w-4 h-4 shrink-0 transition-transform group-hover:-translate-x-0.5" />
+              <div className="min-w-0 flex-1">
                 <span className="block text-[10px] text-zinc-400">Sebelumnya</span>
-                <span className="font-semibold text-zinc-800 dark:text-zinc-200">{prevProject.title}</span>
-              </span>
+                <span className="font-semibold text-zinc-800 dark:text-zinc-200 truncate block">{prevProject.title}</span>
+              </div>
             </Link>
           ) : (
-            <div />
+            <div className="hidden sm:block" />
           )}
 
-          <Link
-            href="/#projects"
-            className="hidden sm:inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-zinc-100 dark:bg-zinc-900 hover:bg-zinc-200 dark:hover:bg-zinc-800 border border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors text-xs font-mono font-semibold"
-          >
-            <ArrowLeft className="w-3.5 h-3.5" />
-            cd .. / Galeri
-          </Link>
+          <div className="text-center order-first sm:order-none">
+            <Link
+              href="/#projects"
+              className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-4 py-2.5 rounded-xl bg-zinc-100 dark:bg-zinc-900 hover:bg-zinc-200 dark:hover:bg-zinc-800 border border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors text-xs font-mono font-semibold"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              cd .. / Galeri Project
+            </Link>
+          </div>
 
           {nextProject ? (
             <Link
               href={`/project/${nextProject.slug}`}
-              className="flex items-center gap-2 p-3 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-900 border border-transparent hover:border-zinc-200 dark:hover:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors text-right"
+              className="flex items-center justify-end gap-2.5 p-3 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors text-right group"
             >
-              <span>
+              <div className="min-w-0 flex-1">
                 <span className="block text-[10px] text-zinc-400">Selanjutnya</span>
-                <span className="font-semibold text-zinc-800 dark:text-zinc-200">{nextProject.title}</span>
-              </span>
-              <ArrowRight className="w-4 h-4" />
+                <span className="font-semibold text-zinc-800 dark:text-zinc-200 truncate block">{nextProject.title}</span>
+              </div>
+              <ArrowRight className="w-4 h-4 shrink-0 transition-transform group-hover:translate-x-0.5" />
             </Link>
           ) : (
-            <div />
+            <div className="hidden sm:block" />
           )}
         </div>
       </main>
