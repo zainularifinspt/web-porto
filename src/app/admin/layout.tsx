@@ -31,6 +31,8 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [adminUser, setAdminUser] = useState<string>("admin@developer.dev");
 
+  const [unreadCount, setUnreadCount] = useState<number>(0);
+
   // Skip layout shell on login page
   const isLoginPage = pathname === "/admin/login";
 
@@ -40,8 +42,18 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       if (stored) {
         setAdminUser(stored);
       }
+
+      // Fetch unread messages count
+      fetch("/api/contact/messages?stats=true")
+        .then((res) => res.json())
+        .then((data) => {
+          if (data && data.stats && typeof data.stats.unread === "number") {
+            setUnreadCount(data.stats.unread);
+          }
+        })
+        .catch(() => {});
     }
-  }, [isLoginPage]);
+  }, [isLoginPage, pathname]);
 
   const handleLogout = async () => {
     try {
@@ -68,7 +80,6 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       href: "/admin",
       icon: FolderGit2,
       active: pathname === "/admin" || pathname.startsWith("/admin/projects"),
-      badge: "6 Item",
     },
     {
       label: "Urutan & Unggulan",
@@ -84,9 +95,10 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     },
     {
       label: "Pesan & Kontak",
-      href: "/contact",
+      href: "/admin/messages",
       icon: MessageSquare,
-      active: pathname === "/contact",
+      active: pathname === "/admin/messages",
+      badge: unreadCount > 0 ? `${unreadCount} Baru` : undefined,
     },
   ];
 
