@@ -21,6 +21,7 @@ import {
 import { MOCK_PROJECTS } from "@/data/mockProjects";
 import Navbar from "@/components/Navbar";
 import ProjectImageGallery from "@/components/ProjectImageGallery";
+import ProjectStoryAndRole from "@/components/ProjectStoryAndRole";
 
 interface PageProps {
   params: Promise<{
@@ -192,45 +193,9 @@ export default async function ProjectDetailPage({ params }: PageProps) {
 
         {/* Story, Architecture, and Tech Stack Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Main Story & Technical Deep Dive */}
-          <div className="lg:col-span-2 space-y-6">
-            <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/40 p-6 sm:p-8 shadow-sm">
-              <h2 className="text-xl font-bold font-mono text-zinc-900 dark:text-zinc-100 flex items-center gap-2 mb-4">
-                <Terminal className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-                Cerita &amp; Tantangan Teknis
-              </h2>
-              <p className="text-zinc-700 dark:text-zinc-300 leading-relaxed whitespace-pre-line text-sm sm:text-base">
-                {project.story}
-              </p>
-            </div>
-
-            {/* Architecture Highlights */}
-            <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/40 p-6 sm:p-8 shadow-sm">
-              <h3 className="text-base font-bold font-mono text-zinc-900 dark:text-zinc-100 flex items-center gap-2 mb-4">
-                <Compass className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                Solusi Arsitektur &amp; Peran Saya
-              </h3>
-              <div className="space-y-3 font-mono text-xs text-zinc-700 dark:text-zinc-300">
-                <div className="flex items-start gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-                  <span>
-                    <strong>Desain Sistem:</strong> Merancang arsitektur komponen modular dan pola manajemen state yang decoupled.
-                  </span>
-                </div>
-                <div className="flex items-start gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-                  <span>
-                    <strong>Optimasi Kinerja:</strong> Menerapkan caching cerdas, code splitting, dan kompresi aset gambar untuk Core Web Vitals optimal.
-                  </span>
-                </div>
-                <div className="flex items-start gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-                  <span>
-                    <strong>Keamanan &amp; Skalabilitas:</strong> Penanganan rate limiting, validasi input berlapis, dan kesiapan deploy edge di Vercel.
-                  </span>
-                </div>
-              </div>
-            </div>
+          {/* Main Story & Technical Deep Dive via ProjectStoryAndRole */}
+          <div className="lg:col-span-2">
+            <ProjectStoryAndRole project={project} />
           </div>
 
           {/* Sidebar Tech Stack & Call-To-Action */}
