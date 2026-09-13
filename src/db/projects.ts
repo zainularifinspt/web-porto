@@ -79,25 +79,23 @@ export async function getProjects(options?: {
     try {
       let sql = `${PROJECT_SELECT_SQL} ORDER BY p.is_featured DESC, p.sort_order ASC, p.created_at DESC`;
       const rows = await dbQuery(sql);
-      if (rows && rows.length > 0) {
-        let list = rows.map(mapProjectRow);
+      let list = rows.map(mapProjectRow);
 
-        if (options?.featuredOnly) {
-          list = list.filter((p) => p.isFeatured);
-        }
-
-        if (options?.search && options.search.trim()) {
-          const q = options.search.toLowerCase().trim();
-          list = list.filter(
-            (p) =>
-              p.title.toLowerCase().includes(q) ||
-              p.summary.toLowerCase().includes(q) ||
-              p.technologies.some((t) => t.toLowerCase().includes(q))
-          );
-        }
-
-        return list;
+      if (options?.featuredOnly) {
+        list = list.filter((p) => p.isFeatured);
       }
+
+      if (options?.search && options.search.trim()) {
+        const q = options.search.toLowerCase().trim();
+        list = list.filter(
+          (p) =>
+            p.title.toLowerCase().includes(q) ||
+            p.summary.toLowerCase().includes(q) ||
+            p.technologies.some((t) => t.toLowerCase().includes(q))
+        );
+      }
+
+      return list;
     } catch (err) {
       console.warn("Database query failed, falling back to memory:", err);
     }
@@ -137,9 +135,7 @@ export async function getProjectById(id: string): Promise<Project | null> {
         `${PROJECT_SELECT_SQL} WHERE p.id::text = $1 OR LOWER(p.slug) = LOWER($1) LIMIT 1`,
         [id]
       );
-      if (row) {
-        return mapProjectRow(row);
-      }
+      return row ? mapProjectRow(row) : null;
     } catch (err) {
       console.warn("Database getProjectById failed, falling back to memory:", err);
     }

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -26,7 +26,22 @@ import { MOCK_PROJECTS } from "@/data/mockProjects";
 import ToastNotification, { ToastType } from "@/components/ToastNotification";
 
 export default function AdminProjectsPage() {
-  const [projects, setProjects] = useState<Project[]>(MOCK_PROJECTS);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/projects")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && data.success && Array.isArray(data.data)) {
+          setProjects(data.data);
+        } else {
+          setProjects(MOCK_PROJECTS);
+        }
+      })
+      .catch(() => setProjects(MOCK_PROJECTS))
+      .finally(() => setIsLoading(false));
+  }, []);
   const [searchQuery, setSearchQuery] = useState("");
   const [filterFeatured, setFilterFeatured] = useState<"all" | "featured" | "regular">("all");
   const [toast, setToast] = useState<{

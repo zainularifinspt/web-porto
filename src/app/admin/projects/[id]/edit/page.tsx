@@ -1,6 +1,6 @@
 import React from "react";
 import ProjectForm from "@/components/ProjectForm";
-import { MOCK_PROJECTS } from "@/data/mockProjects";
+import { getProjectById } from "@/db";
 import { notFound } from "next/navigation";
 
 interface EditProjectPageProps {
@@ -12,11 +12,10 @@ interface EditProjectPageProps {
 export default async function EditProjectPage({ params }: EditProjectPageProps) {
   const { id } = await params;
 
-  // Find matching project from mock data
-  const project = MOCK_PROJECTS.find((p) => p.id === id || p.slug === id);
+  // Find matching project from database
+  const project = await getProjectById(id);
 
   if (!project) {
-    // If not found in mock list, provide default or not found
     notFound();
   }
 
