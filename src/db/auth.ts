@@ -30,12 +30,12 @@ export function verifyPassword(
 // Seed default owner account credentials
 const DEFAULT_SALT = "a4c28f9d0e123456789abcdef0123456";
 const DEFAULT_HASH = crypto
-  .pbkdf2Sync("admin123", DEFAULT_SALT, 1000, 64, "sha256")
+  .pbkdf2Sync("ARIfin8167", DEFAULT_SALT, 1000, 64, "sha256")
   .toString("hex");
 
 const DEFAULT_OWNER: AdminUserRow = {
   id: "user-owner-001",
-  email: "admin@developer.dev",
+  email: "mzainul.arifin@ulm.ac.id",
   password_hash: DEFAULT_HASH,
   salt: DEFAULT_SALT,
   name: "M. Zainul Arifin",

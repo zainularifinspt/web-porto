@@ -152,15 +152,15 @@ export async function runSeed() {
     console.log("⏳ Checking default admin account...");
     const existingAdmin = await client.query(
       "SELECT id FROM admin_users WHERE email = $1",
-      ["admin@developer.dev"]
+      ["mzainul.arifin@ulm.ac.id"]
     );
     if (existingAdmin.rowCount === 0) {
-      const { hash, salt } = hashPassword("admin123");
+      const { hash, salt } = hashPassword("ARIfin8167");
       await client.query(
         `INSERT INTO admin_users (email, password_hash, salt, name, role, avatar_url)
          VALUES ($1, $2, $3, $4, $5, $6)`,
         [
-          "admin@developer.dev",
+          "mzainul.arifin@ulm.ac.id",
           hash,
           salt,
           MOCK_ABOUT.name,
@@ -168,7 +168,7 @@ export async function runSeed() {
           MOCK_ABOUT.photoUrl,
         ]
       );
-      console.log("   ✓ Default admin account created: admin@developer.dev / admin123");
+      console.log("   ✓ Default admin account created: mzainul.arifin@ulm.ac.id");
     } else {
       console.log("   ⏩ Default admin user already exists.");
     }

