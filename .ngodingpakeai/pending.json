@@ -1,6 +1,6 @@
 {
   "repo": "Web Portofolio",
-  "generatedForCommit": "b86b38d255bbab916b674c37cdd32057d97fb329",
+  "generatedForCommit": "5e31005d36acc0d1c619068f10b99314adf380e4",
   "files": [
     {
       "path": ".claude/skills/ngodingpakeai/SKILL.md",
@@ -124,13 +124,13 @@
     },
     {
       "path": "src/app/api/contact/messages/[id]/route.ts",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 3640
     },
     {
       "path": "src/app/api/contact/messages/route.ts",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 4458
     },
@@ -139,6 +139,12 @@
       "reason": "needs_summary",
       "language": "typescript",
       "size": 5189
+    },
+    {
+      "path": "src/app/api/contact/social/route.ts",
+      "reason": "new",
+      "language": "typescript",
+      "size": 4812
     },
     {
       "path": "src/app/api/projects/[slug]/route.ts",
@@ -352,15 +358,15 @@
     },
     {
       "path": "src/db/contact.ts",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 6466
     },
     {
       "path": "src/db/index.ts",
-      "reason": "needs_summary",
+      "reason": "changed",
       "language": "typescript",
-      "size": 1277
+      "size": 1308
     },
     {
       "path": "src/db/migrate.ts",
@@ -393,6 +399,12 @@
       "size": 1712
     },
     {
+      "path": "src/db/migrations/005_create_social_links_schema.sql",
+      "reason": "new",
+      "language": "sql",
+      "size": 1286
+    },
+    {
       "path": "src/db/schema.ts",
       "reason": "needs_summary",
       "language": "typescript",
@@ -415,6 +427,12 @@
       "reason": "needs_summary",
       "language": "sql",
       "size": 4341
+    },
+    {
+      "path": "src/db/socialLinks.ts",
+      "reason": "new",
+      "language": "typescript",
+      "size": 3628
     },
     {
       "path": "src/lib/utils.ts",

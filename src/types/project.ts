@@ -26,4 +26,6 @@ export interface Project {
     status?: "Live" | "Beta" | "Open Source" | "In Development";
     views?: string;
   };
+  architectureNotes?: string;
+  challenges?: string;
 }
