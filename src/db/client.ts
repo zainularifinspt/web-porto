@@ -35,7 +35,10 @@ declare global {
 function getConnectionString(): string | undefined {
   const raw = process.env.DATABASE_URL;
   if (!raw) return undefined;
-  return raw.replace(/&?channel_binding=[^&]+/g, "").replace(/\?$/, "");
+  return raw
+    .replace(/&?channel_binding=[^&]+/g, "")
+    .replace(/sslmode=require/g, "sslmode=verify-full")
+    .replace(/\?$/, "");
 }
 
 /**
