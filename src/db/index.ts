@@ -37,4 +37,5 @@ export async function getFeaturedProjects(): Promise<Project[]> {
 
 export * from "./about";
 export * from "./contact";
+export * from "./socialLinks";
 export * from "./schema";
