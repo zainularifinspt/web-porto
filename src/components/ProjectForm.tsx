@@ -322,11 +322,7 @@ export default function ProjectForm({
 
     setIsSubmitting(true);
 
-    // Simulate saving project data with realistic latency
-    await new Promise((resolve) => setTimeout(resolve, 700));
-
-    const savedProject: Project = {
-      id: initialData?.id || `proj-${Date.now()}`,
+    const projectPayload = {
       title: title.trim(),
       slug: slug.trim(),
       summary: summary.trim(),
@@ -337,7 +333,6 @@ export default function ProjectForm({
       thumbnailUrl: thumbnailUrl.trim(),
       isFeatured,
       sortOrder: Number(sortOrder),
-      createdAt: initialData?.createdAt || new Date().toISOString(),
       technologies,
       stats: {
         status,
@@ -346,22 +341,66 @@ export default function ProjectForm({
       },
     };
 
-    setIsSubmitting(false);
+    try {
+      const endpoint =
+        isEdit && (initialData?.slug || initialData?.id)
+          ? `/api/projects/${initialData.slug || initialData.id}`
+          : "/api/projects";
+      const method = isEdit ? "PATCH" : "POST";
 
-    setToast({
-      isOpen: true,
-      type: "success",
-      title: isEdit ? "Project Berhasil Diperbarui" : "Project Berhasil Ditambahkan",
-      message: `Data untuk "${title}" telah disimpan ke katalog portofolio. Mengalihkan ke dashboard...`,
-    });
+      const res = await fetch(endpoint, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(projectPayload),
+      });
 
-    if (onSuccess) {
-      onSuccess(savedProject);
+      const resData = await res.json();
+
+      if (!res.ok || !resData.success) {
+        if (resData.validationErrors) {
+          setErrors(resData.validationErrors);
+        }
+        setIsSubmitting(false);
+        setToast({
+          isOpen: true,
+          type: "error",
+          title: "Gagal Menyimpan",
+          message: resData.error || "Gagal menyimpan data project ke database.",
+        });
+        return;
+      }
+
+      const savedProject: Project = resData.data || {
+        ...projectPayload,
+        id: initialData?.id || `proj-${Date.now()}`,
+        createdAt: initialData?.createdAt || new Date().toISOString(),
+      };
+
+      setIsSubmitting(false);
+
+      setToast({
+        isOpen: true,
+        type: "success",
+        title: isEdit ? "Project Berhasil Diperbarui" : "Project Berhasil Ditambahkan",
+        message: `Data untuk "${title}" telah disimpan ke katalog portofolio. Mengalihkan ke dashboard...`,
+      });
+
+      if (onSuccess) {
+        onSuccess(savedProject);
+      }
+
+      setTimeout(() => {
+        router.push("/admin");
+      }, 1200);
+    } catch {
+      setIsSubmitting(false);
+      setToast({
+        isOpen: true,
+        type: "error",
+        title: "Koneksi Terputus",
+        message: "Gagal terhubung ke API server. Periksa jaringan Anda.",
+      });
     }
-
-    setTimeout(() => {
-      router.push("/admin");
-    }, 1200);
   };
 
   const errorCount = Object.keys(errors).length;

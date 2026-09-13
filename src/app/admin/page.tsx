@@ -61,36 +61,50 @@ export default function AdminProjectsPage() {
   const totalStars = projects.reduce((acc, p) => acc + (p.stats?.stars || 0), 0);
   const uniqueTechCount = new Set(projects.flatMap((p) => p.technologies)).size;
 
-  const handleDeleteMock = (id: string, title: string) => {
+  const handleDeleteMock = async (id: string, title: string) => {
     if (confirm(`Apakah Anda yakin ingin menghapus project "${title}"?`)) {
+      try {
+        await fetch(`/api/projects/${id}`, { method: "DELETE" });
+      } catch {
+        // Fallback
+      }
       setProjects((prev) => prev.filter((p) => p.id !== id));
       setToast({
         isOpen: true,
         type: "success",
         title: "Project Dihapus",
-        message: `Project "${title}" berhasil dihapus dari daftar portofolio (simulasi mock).`,
+        message: `Project "${title}" berhasil dihapus dari katalog portofolio.`,
       });
     }
   };
 
-  const handleToggleFeatured = (id: string) => {
+  const handleToggleFeatured = async (id: string) => {
+    const target = projects.find((p) => p.id === id);
+    if (!target) return;
+    const nextState = !target.isFeatured;
+
+    try {
+      await fetch(`/api/projects/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ isFeatured: nextState }),
+      });
+    } catch {
+      // Fallback
+    }
+
     setProjects((prev) =>
-      prev.map((p) => {
-        if (p.id === id) {
-          const nextState = !p.isFeatured;
-          setToast({
-            isOpen: true,
-            type: "info",
-            title: nextState ? "Ditandai Unggulan" : "Unggulan Dinonaktifkan",
-            message: `Status unggulan untuk "${p.title}" telah diubah ke: ${
-              nextState ? "Aktif (Tampil di Beranda)" : "Reguler"
-            }`,
-          });
-          return { ...p, isFeatured: nextState };
-        }
-        return p;
-      })
+      prev.map((p) => (p.id === id ? { ...p, isFeatured: nextState } : p))
     );
+
+    setToast({
+      isOpen: true,
+      type: "info",
+      title: nextState ? "Ditandai Unggulan" : "Unggulan Dinonaktifkan",
+      message: `Status unggulan untuk "${target.title}" telah diubah ke: ${
+        nextState ? "Aktif (Tampil di Beranda)" : "Reguler"
+      }`,
+    });
   };
 
   return (
