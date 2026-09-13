@@ -1,6 +1,6 @@
 {
   "repo": "Web Portofolio",
-  "generatedForCommit": "bc7409b5e51a71e96cb4b8c7d8bd21d71919329b",
+  "generatedForCommit": "fadc4b146dbcd3aec3ccb0310da5eda9476c2a14",
   "files": [
     {
       "path": ".claude/skills/ngodingpakeai/SKILL.md",
@@ -66,7 +66,7 @@
       "path": "package.json",
       "reason": "needs_summary",
       "language": "json",
-      "size": 721
+      "size": 858
     },
     {
       "path": "postcss.config.mjs",
@@ -75,10 +75,64 @@
       "size": 94
     },
     {
+      "path": "src/app/about/page.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 5837
+    },
+    {
+      "path": "src/app/admin/layout.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 9861
+    },
+    {
+      "path": "src/app/admin/login/page.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 14375
+    },
+    {
+      "path": "src/app/admin/page.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 15482
+    },
+    {
+      "path": "src/app/admin/projects/[id]/edit/page.tsx",
+      "reason": "new",
+      "language": "typescript",
+      "size": 726
+    },
+    {
+      "path": "src/app/admin/projects/new/page.tsx",
+      "reason": "new",
+      "language": "typescript",
+      "size": 239
+    },
+    {
+      "path": "src/app/api/about/route.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 4272
+    },
+    {
+      "path": "src/app/api/projects/[slug]/route.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 1723
+    },
+    {
       "path": "src/app/api/projects/route.ts",
       "reason": "needs_summary",
       "language": "typescript",
       "size": 1540
+    },
+    {
+      "path": "src/app/contact/page.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 13035
     },
     {
       "path": "src/app/globals.css",
@@ -96,19 +150,49 @@
       "path": "src/app/not-found.tsx",
       "reason": "needs_summary",
       "language": "typescript",
-      "size": 2568
+      "size": 3480
     },
     {
       "path": "src/app/page.tsx",
       "reason": "needs_summary",
       "language": "typescript",
-      "size": 7276
+      "size": 4199
+    },
+    {
+      "path": "src/app/project/[slug]/not-found.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 6006
     },
     {
       "path": "src/app/project/[slug]/page.tsx",
       "reason": "needs_summary",
       "language": "typescript",
-      "size": 14268
+      "size": 12109
+    },
+    {
+      "path": "src/components/BackButton.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 1069
+    },
+    {
+      "path": "src/components/CollaborationCTA.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 5949
+    },
+    {
+      "path": "src/components/ContactMessageForm.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 16859
+    },
+    {
+      "path": "src/components/ExperienceJourney.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 10211
     },
     {
       "path": "src/components/HeroTerminal.tsx",
@@ -117,16 +201,40 @@
       "size": 5119
     },
     {
+      "path": "src/components/ImageLightbox.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 7148
+    },
+    {
       "path": "src/components/Navbar.tsx",
       "reason": "needs_summary",
       "language": "typescript",
-      "size": 5376
+      "size": 6693
+    },
+    {
+      "path": "src/components/ProfileCard.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 11647
+    },
+    {
+      "path": "src/components/ProjectActionButtons.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 7096
     },
     {
       "path": "src/components/ProjectCard.tsx",
       "reason": "needs_summary",
       "language": "typescript",
       "size": 9431
+    },
+    {
+      "path": "src/components/ProjectForm.tsx",
+      "reason": "new",
+      "language": "typescript",
+      "size": 22954
     },
     {
       "path": "src/components/ProjectGallery.tsx",
@@ -136,15 +244,39 @@
     },
     {
       "path": "src/components/ProjectImageGallery.tsx",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "typescript",
-      "size": 10683
+      "size": 9553
+    },
+    {
+      "path": "src/components/ProjectStoryAndRole.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 6215
+    },
+    {
+      "path": "src/components/ProjectTechBadges.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 13992
     },
     {
       "path": "src/components/QuickPreviewModal.tsx",
       "reason": "needs_summary",
       "language": "typescript",
       "size": 6613
+    },
+    {
+      "path": "src/components/SkillsSection.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 13313
+    },
+    {
+      "path": "src/components/SocialLinksList.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 8999
     },
     {
       "path": "src/components/ThemeProvider.tsx",
@@ -159,16 +291,40 @@
       "size": 4956
     },
     {
+      "path": "src/data/mockAbout.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 6375
+    },
+    {
+      "path": "src/data/mockContact.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 2656
+    },
+    {
       "path": "src/data/mockProjects.ts",
       "reason": "needs_summary",
       "language": "typescript",
       "size": 6989
     },
     {
+      "path": "src/db/about.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 2741
+    },
+    {
       "path": "src/db/index.ts",
       "reason": "needs_summary",
       "language": "typescript",
-      "size": 1198
+      "size": 1250
+    },
+    {
+      "path": "src/db/migrate.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 1532
     },
     {
       "path": "src/db/migrations/001_create_projects_schema.sql",
@@ -177,16 +333,28 @@
       "size": 2557
     },
     {
+      "path": "src/db/migrations/002_project_details_and_stats.sql",
+      "reason": "needs_summary",
+      "language": "sql",
+      "size": 1317
+    },
+    {
+      "path": "src/db/migrations/003_create_about_schema.sql",
+      "reason": "needs_summary",
+      "language": "sql",
+      "size": 3179
+    },
+    {
       "path": "src/db/schema.ts",
       "reason": "needs_summary",
       "language": "typescript",
-      "size": 893
+      "size": 3147
     },
     {
       "path": "src/db/seed.ts",
       "reason": "needs_summary",
       "language": "typescript",
-      "size": 935
+      "size": 1652
     },
     {
       "path": "src/db/seeds/001_projects_seed.sql",
@@ -195,10 +363,28 @@
       "size": 8949
     },
     {
+      "path": "src/db/seeds/002_project_details_seed.sql",
+      "reason": "needs_summary",
+      "language": "sql",
+      "size": 4341
+    },
+    {
       "path": "src/lib/utils.ts",
       "reason": "needs_summary",
       "language": "typescript",
       "size": 169
+    },
+    {
+      "path": "src/types/about.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 1072
+    },
+    {
+      "path": "src/types/contact.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 804
     },
     {
       "path": "src/types/project.ts",

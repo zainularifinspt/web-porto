@@ -17,6 +17,7 @@ import {
   ExternalLink,
   ChevronRight,
   Layers,
+  ArrowUpDown,
 } from "lucide-react";
 import ThemeToggle from "@/components/ThemeToggle";
 
@@ -61,6 +62,12 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       icon: FolderGit2,
       active: pathname === "/admin" || pathname.startsWith("/admin/projects"),
       badge: "6 Item",
+    },
+    {
+      label: "Urutan & Unggulan",
+      href: "/admin/reorder",
+      icon: ArrowUpDown,
+      active: pathname === "/admin/reorder",
     },
     {
       label: "Profil & Keahlian",

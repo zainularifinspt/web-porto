@@ -95,7 +95,14 @@ export default function AdminProjectsPage() {
           </p>
         </div>
 
-        <div className="flex items-center gap-2.5 shrink-0">
+        <div className="flex items-center gap-2.5 shrink-0 flex-wrap">
+          <Link
+            href="/admin/reorder"
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 hover:border-emerald-500/50 text-zinc-700 dark:text-zinc-200 font-mono font-semibold text-xs transition-all shadow-sm"
+          >
+            <ArrowUpDown className="w-4 h-4 text-emerald-500" />
+            <span>Atur Unggulan &amp; Urutan</span>
+          </Link>
           <Link
             href="/admin/projects/new"
             className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 dark:bg-emerald-500 dark:hover:bg-emerald-400 text-white dark:text-zinc-950 font-mono font-bold text-xs transition-all shadow-md shadow-emerald-500/20"
