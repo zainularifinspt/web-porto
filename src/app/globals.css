@@ -3,7 +3,7 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  /* Light Theme Palette (Developer Clean) */
+  /* Light Theme Palette (Developer Clean / GitHub & VSCode Light Inspiration) */
   --background: #f8fafc;
   --foreground: #0f172a;
 
@@ -29,21 +29,27 @@
   --input: #e2e8f0;
   --ring: #10b981;
 
-  /* Terminal Theme Variables */
-  --terminal-bg: #ffffff;
-  --terminal-bar: #f1f5f9;
+  /* Terminal & Syntax Highlighting Tokens (Light) */
+  --terminal-bg: #f8fafc;
+  --terminal-bar: #e2e8f0;
   --terminal-border: #cbd5e1;
   --terminal-text: #0f172a;
+
+  --syntax-keyword: #7c3aed;
+  --syntax-string: #059669;
+  --syntax-variable: #0284c7;
+  --syntax-comment: #94a3b8;
+  --syntax-function: #d97706;
 
   --radius: 0.75rem;
 }
 
 .dark {
-  /* Dark Theme Palette (Cyberpunk / Terminal Dev Sleek) */
+  /* Dark Theme Palette (Cyberpunk / Matrix / Carbon Terminal Dev Sleek) */
   --background: #09090b;
   --foreground: #f4f4f5;
 
-  --card: #18181b;
+  --card: #121215;
   --card-foreground: #f4f4f5;
 
   --popover: #18181b;
@@ -52,10 +58,10 @@
   --primary: #10b981;
   --primary-foreground: #09090b;
 
-  --secondary: #27272a;
+  --secondary: #1f1f23;
   --secondary-foreground: #e4e4e7;
 
-  --muted: #27272a;
+  --muted: #18181b;
   --muted-foreground: #a1a1aa;
 
   --accent: #064e3b;
@@ -65,11 +71,17 @@
   --input: #27272a;
   --ring: #34d399;
 
-  /* Terminal Theme Variables */
+  /* Terminal & Syntax Highlighting Tokens (Dark Dev) */
   --terminal-bg: #09090b;
-  --terminal-bar: #18181b;
+  --terminal-bar: #141417;
   --terminal-border: #27272a;
   --terminal-text: #34d399;
+
+  --syntax-keyword: #c084fc;
+  --syntax-string: #34d399;
+  --syntax-variable: #38bdf8;
+  --syntax-comment: #71717a;
+  --syntax-function: #fbbf24;
 }
 
 @theme inline {
@@ -96,13 +108,92 @@
   --color-terminal-border: var(--terminal-border);
   --color-terminal-text: var(--terminal-text);
 
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-geist-sans), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
 }
 
 body {
   background-color: var(--background);
   color: var(--foreground);
-  font-feature-settings: "rlig" 1, "calt" 1;
-  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+  font-family: var(--font-sans);
+  font-feature-settings: "rlig" 1, "calt" 1, "liga" 1;
+  transition: background-color 0.25s cubic-bezier(0.4, 0, 0.2, 1), color 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Developer Monospace Typography Helper */
+code, pre, kbd, samp, .font-mono, .font-code {
+  font-family: var(--font-mono);
+  font-feature-settings: "liga" 1, "calt" 1, "zero" 1;
+}
+
+/* Custom Developer Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #3f3f46;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #71717a;
+}
+
+/* Developer Selection Styling */
+::selection {
+  background-color: rgba(16, 185, 129, 0.25);
+  color: #34d399;
+}
+
+/* Subtle Developer Background Grids & Dots */
+.bg-developer-grid {
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.dark .bg-developer-grid {
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+}
+
+.bg-developer-dots {
+  background-image: radial-gradient(rgba(16, 185, 129, 0.15) 1px, transparent 0);
+  background-size: 24px 24px;
+}
+
+/* Glow & Neon Accents */
+.glow-emerald {
+  box-shadow: 0 0 25px -5px rgba(16, 185, 129, 0.35);
+}
+
+.glow-cyan {
+  box-shadow: 0 0 25px -5px rgba(6, 182, 212, 0.35);
+}
+
+.glow-border-emerald {
+  border-color: rgba(16, 185, 129, 0.4);
+  box-shadow: 0 0 15px -2px rgba(16, 185, 129, 0.2);
+}
+
+/* Scanline animation for retro dev touch */
+@keyframes scanline {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+.animate-scanline {
+  animation: scanline 8s linear infinite;
 }
