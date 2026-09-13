@@ -1,6 +1,5 @@
 import React from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { Metadata } from "next";
 import {
   Terminal,
@@ -21,6 +20,7 @@ import {
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import ProfileCard from "@/components/ProfileCard";
+import SkillsSection from "@/components/SkillsSection";
 import { MOCK_ABOUT } from "@/data/mockAbout";
 
 export const metadata: Metadata = {
@@ -85,65 +85,8 @@ export default function AboutPage() {
           </div>
         </div>
 
-        {/* Skills Overview Section */}
-        <div className="space-y-6">
-          <div className="flex items-center justify-between gap-2">
-            <div className="flex items-center gap-2">
-              <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
-                <Layers className="w-4 h-4" />
-              </div>
-              <div>
-                <h2 className="text-lg font-bold font-mono text-zinc-900 dark:text-zinc-100">
-                  Keahlian & Kemampuan Teknis
-                </h2>
-                <span className="text-xs font-mono text-zinc-400">
-                  Daftar stack dan teknologi yang saya gunakan sehari-hari
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {profile.skills.map((category) => (
-              <div
-                key={category.id}
-                className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/60 p-6 shadow-sm flex flex-col justify-between"
-              >
-                <div>
-                  <h3 className="font-mono font-bold text-sm text-zinc-900 dark:text-zinc-100 mb-4 pb-2 border-b border-zinc-100 dark:border-zinc-800/80 flex items-center justify-between">
-                    <span>{category.name}</span>
-                    <span className="text-[11px] font-normal text-emerald-600 dark:text-emerald-400 font-mono">
-                      {category.skills.length} Stack
-                    </span>
-                  </h3>
-
-                  <div className="space-y-3">
-                    {category.skills.map((skill) => (
-                      <div
-                        key={skill.name}
-                        className="p-2.5 rounded-xl bg-zinc-50 dark:bg-zinc-950/60 border border-zinc-200/60 dark:border-zinc-800/60 hover:border-emerald-500/40 transition-colors"
-                      >
-                        <div className="flex items-center justify-between gap-2 mb-1 font-mono text-xs">
-                          <span className="font-bold text-zinc-800 dark:text-zinc-200">
-                            {skill.name}
-                          </span>
-                          <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-400 border border-emerald-300 dark:border-emerald-800/60">
-                            {skill.level}
-                          </span>
-                        </div>
-                        {skill.description && (
-                          <p className="text-[11px] text-zinc-500 dark:text-zinc-400 line-clamp-2">
-                            {skill.description}
-                          </p>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+        {/* Skills Overview Section with Filtering & Empty State */}
+        <SkillsSection categories={profile.skills} />
 
         {/* Experience Journey Section */}
         <div className="space-y-6">
