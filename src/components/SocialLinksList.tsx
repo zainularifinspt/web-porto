@@ -101,22 +101,22 @@ export default function SocialLinksList({
           >
             <div className="space-y-3">
               <div className="flex items-center justify-between gap-2">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-zinc-800 dark:text-zinc-200 group-hover:text-emerald-500 group-hover:scale-105 transition-all">
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="w-10 h-10 rounded-xl bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-zinc-800 dark:text-zinc-200 group-hover:text-emerald-500 group-hover:scale-105 transition-all shrink-0">
                     {renderPlatformIcon(link.platform)}
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <div className="flex items-center gap-2">
-                      <h3 className="font-mono font-bold text-sm text-zinc-900 dark:text-zinc-100">
+                      <h3 className="font-mono font-bold text-sm text-zinc-900 dark:text-zinc-100 truncate">
                         {link.platform}
                       </h3>
                       {link.isPrimary && (
-                        <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 shrink-0">
                           Utama
                         </span>
                       )}
                     </div>
-                    <span className="font-mono text-xs text-zinc-500 dark:text-zinc-400">
+                    <span className="font-mono text-xs text-zinc-500 dark:text-zinc-400 truncate block">
                       {link.handle}
                     </span>
                   </div>
@@ -125,7 +125,7 @@ export default function SocialLinksList({
                 {/* Copy handle button */}
                 <button
                   onClick={() => handleCopy(link.id, link.url)}
-                  className="p-2 rounded-lg text-zinc-400 hover:text-zinc-800 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+                  className="p-2 rounded-lg text-zinc-400 hover:text-zinc-800 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors shrink-0"
                   title="Salin tautan profil"
                   aria-label={`Salin tautan ${link.platform}`}
                 >
@@ -145,15 +145,15 @@ export default function SocialLinksList({
               </p>
             </div>
 
-            <div className="pt-4 mt-3 border-t border-zinc-100 dark:border-zinc-800/60 flex items-center justify-between">
-              <span className="text-[11px] font-mono text-zinc-400">
+            <div className="pt-4 mt-3 border-t border-zinc-100 dark:border-zinc-800/60 flex items-center justify-between gap-2">
+              <span className="text-[11px] font-mono text-zinc-400 truncate max-w-[150px] sm:max-w-[220px]">
                 {link.url.replace(/^https?:\/\//, "")}
               </span>
               <a
                 href={link.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-800 hover:bg-emerald-600 hover:text-white dark:hover:bg-emerald-500 dark:hover:text-zinc-950 font-mono text-xs font-semibold text-zinc-800 dark:text-zinc-200 transition-colors"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-800 hover:bg-emerald-600 hover:text-white dark:hover:bg-emerald-500 dark:hover:text-zinc-950 font-mono text-xs font-semibold text-zinc-800 dark:text-zinc-200 transition-colors shrink-0"
               >
                 <span>Kunjungi</span>
                 <ExternalLink className="w-3 h-3" />

@@ -99,11 +99,11 @@ export default function CollaborationCTA({
 
         {/* Action Button Strip */}
         <div className="pt-4 border-t border-white/15 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
             {/* Primary Action Button */}
             <Link
               href="/contact"
-              className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-white text-zinc-950 hover:bg-emerald-50 font-mono font-bold text-xs transition-all shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 group"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-white text-zinc-950 hover:bg-emerald-50 font-mono font-bold text-xs transition-all shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 group w-full sm:w-auto"
             >
               <span>Mulai Diskusi Proyek</span>
               <ArrowRight className="w-4 h-4 text-emerald-700 group-hover:translate-x-1 transition-transform" />
@@ -114,7 +114,7 @@ export default function CollaborationCTA({
               href={calendarUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-mono font-semibold text-xs transition-all backdrop-blur-sm"
+              className="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-mono font-semibold text-xs transition-all backdrop-blur-sm w-full sm:w-auto"
             >
               <Calendar className="w-4 h-4 text-emerald-300" />
               <span>Sesi 1-on-1 (30 Menit)</span>
@@ -122,12 +122,14 @@ export default function CollaborationCTA({
           </div>
 
           {/* Quick Copy Email Snippet */}
-          <div className="flex items-center gap-2 bg-black/30 px-3.5 py-2 rounded-xl border border-white/10 text-xs font-mono">
-            <Mail className="w-4 h-4 text-emerald-300 shrink-0" />
-            <span className="text-emerald-100 truncate max-w-[200px]">{email}</span>
+          <div className="flex items-center justify-between sm:justify-start gap-2 bg-black/30 px-3.5 py-2.5 rounded-xl border border-white/10 text-xs font-mono w-full sm:w-auto">
+            <div className="flex items-center gap-2 min-w-0">
+              <Mail className="w-4 h-4 text-emerald-300 shrink-0" />
+              <span className="text-emerald-100 truncate max-w-[180px] sm:max-w-[200px]">{email}</span>
+            </div>
             <button
               onClick={handleCopyEmail}
-              className="p-1 rounded hover:bg-white/10 text-emerald-200 transition-colors ml-1"
+              className="p-1 rounded hover:bg-white/10 text-emerald-200 transition-colors ml-1 shrink-0"
               title="Salin alamat surel"
               aria-label="Salin email"
             >
