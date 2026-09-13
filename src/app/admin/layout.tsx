@@ -78,9 +78,9 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     },
     {
       label: "Profil & Keahlian",
-      href: "/about",
+      href: "/admin/profile",
       icon: FileCode2,
-      active: pathname === "/about",
+      active: pathname === "/admin/profile",
     },
     {
       label: "Pesan & Kontak",

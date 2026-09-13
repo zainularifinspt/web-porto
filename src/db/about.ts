@@ -155,7 +155,27 @@ export async function updateAboutContent(
             existing.id,
           ]
         );
+      } else {
+        await dbQuery(
+          `INSERT INTO about_profiles (
+            name, headline, bio, photo_url, avatar_fallback, status, location, email, github_url, linkedin_url, stats
+          ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
+          [
+            updates.name || "M. Zainul Arifin",
+            updates.headline || "Full-Stack Software Engineer & Web Architect",
+            JSON.stringify(updates.bio || []),
+            updates.photoUrl || updates.photo_url || "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80",
+            updates.avatarFallback || updates.avatar_fallback || "ZA",
+            updates.status || "Open for Work",
+            updates.location || "Indonesia",
+            updates.email || "zainul@developer.dev",
+            updates.githubUrl || updates.github_url || "https://github.com",
+            updates.linkedinUrl || updates.linkedin_url || "https://linkedin.com",
+            JSON.stringify(updates.stats || {}),
+          ]
+        );
       }
+      return await getAboutContent();
     } catch (err) {
       console.warn("Database update failed for about content, updating in-memory:", err);
     }
