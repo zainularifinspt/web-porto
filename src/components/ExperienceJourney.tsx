@@ -59,13 +59,13 @@ export default function ExperienceJourney({ experiences }: ExperienceJourneyProp
 
       {/* Tech Filter Pills */}
       {allTechs.length > 0 && (
-        <div className="flex flex-wrap items-center gap-1.5 pt-1">
-          <span className="text-[11px] font-mono text-zinc-400 mr-1 flex items-center gap-1">
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-1.5 scrollbar-none -mx-1 px-1 sm:overflow-visible sm:flex-wrap pt-1">
+          <span className="text-[11px] font-mono text-zinc-400 mr-1 flex items-center gap-1 shrink-0">
             <Layers className="w-3 h-3 text-emerald-500" /> Filter Stack:
           </span>
           <button
             onClick={() => setSelectedTech(null)}
-            className={`px-2.5 py-1 rounded-md text-[11px] font-mono transition-all ${
+            className={`shrink-0 px-2.5 py-1 rounded-md text-[11px] font-mono transition-all ${
               selectedTech === null
                 ? "bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 font-semibold shadow-xs"
                 : "bg-zinc-100 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-800"
@@ -77,7 +77,7 @@ export default function ExperienceJourney({ experiences }: ExperienceJourneyProp
             <button
               key={tech}
               onClick={() => setSelectedTech(selectedTech === tech ? null : tech)}
-              className={`px-2.5 py-1 rounded-md text-[11px] font-mono transition-all ${
+              className={`shrink-0 px-2.5 py-1 rounded-md text-[11px] font-mono transition-all ${
                 selectedTech === tech
                   ? "bg-emerald-600 text-white dark:bg-emerald-500 dark:text-zinc-950 font-bold shadow-xs"
                   : "bg-zinc-100 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-800"

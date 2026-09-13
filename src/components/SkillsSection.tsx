@@ -150,15 +150,15 @@ export default function SkillsSection({ categories }: SkillsSectionProps) {
       </div>
 
       {/* Category and Level Filter Pills */}
-      <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
-        <div className="flex flex-wrap items-center gap-1.5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-1.5 scrollbar-none -mx-1 px-1 sm:overflow-visible sm:flex-wrap">
           {categoryList.map((cat) => {
             const isActive = selectedCategory === cat.id;
             return (
               <button
                 key={cat.id}
                 onClick={() => setSelectedCategory(cat.id)}
-                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono transition-all ${
+                className={`shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono transition-all ${
                   isActive
                     ? "bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 font-semibold shadow-xs"
                     : "bg-zinc-100 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-800 border border-transparent hover:border-zinc-200 dark:hover:border-zinc-700"
@@ -172,7 +172,7 @@ export default function SkillsSection({ categories }: SkillsSectionProps) {
         </div>
 
         {/* Level Selector */}
-        <div className="flex items-center gap-1.5 text-xs font-mono">
+        <div className="flex items-center gap-1.5 text-xs font-mono overflow-x-auto pb-1 scrollbar-none shrink-0">
           <span className="text-zinc-400 text-[11px] hidden md:inline">Level:</span>
           {["all", "Expert", "Advanced", "Intermediate"].map((lvl) => {
             const isActive = selectedLevel === lvl;
@@ -180,7 +180,7 @@ export default function SkillsSection({ categories }: SkillsSectionProps) {
               <button
                 key={lvl}
                 onClick={() => setSelectedLevel(lvl)}
-                className={`px-2.5 py-1 rounded-md text-[11px] transition-all ${
+                className={`shrink-0 px-2.5 py-1 rounded-md text-[11px] transition-all ${
                   isActive
                     ? "bg-emerald-600 text-white dark:bg-emerald-500 dark:text-zinc-950 font-bold shadow-xs"
                     : "bg-zinc-100 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-800"

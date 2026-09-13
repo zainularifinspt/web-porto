@@ -111,18 +111,18 @@ export default function ProfileCard({
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 text-xs font-mono text-zinc-500 dark:text-zinc-400">
+          <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 sm:gap-4 text-xs font-mono text-zinc-500 dark:text-zinc-400">
             <span className="flex items-center gap-1.5">
               <MapPin className="w-4 h-4 text-emerald-500 shrink-0" />
-              {profile.location}
+              <span>{profile.location}</span>
             </span>
-            <div className="flex items-center gap-1.5">
-              <Mail className="w-4 h-4 text-emerald-500 shrink-0" />
-              <span className="select-all">{profile.email}</span>
+            <div className="flex items-center gap-1.5 bg-zinc-100/80 dark:bg-zinc-800/60 px-2.5 py-1 rounded-lg border border-zinc-200/60 dark:border-zinc-700/60">
+              <Mail className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+              <span className="select-all truncate max-w-[180px] sm:max-w-none">{profile.email}</span>
               <button
                 onClick={handleCopyEmail}
                 title="Salin email"
-                className="p-1 rounded hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-400 hover:text-emerald-500 transition-colors ml-0.5"
+                className="p-1 rounded hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-400 hover:text-emerald-500 transition-colors ml-0.5 shrink-0"
               >
                 {copiedEmail ? (
                   <Check className="w-3.5 h-3.5 text-emerald-500" />
@@ -134,10 +134,10 @@ export default function ProfileCard({
           </div>
 
           {/* Social Links & Primary CTA Buttons */}
-          <div className="pt-2 flex flex-wrap items-center justify-center md:justify-start gap-3">
+          <div className="pt-2 flex flex-wrap items-center justify-center md:justify-start gap-2.5 sm:gap-3">
             <Link
               href="/#contact"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 dark:bg-emerald-500 dark:hover:bg-emerald-400 text-white dark:text-zinc-950 font-mono font-bold text-xs transition-all shadow-md shadow-emerald-500/20"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 dark:bg-emerald-500 dark:hover:bg-emerald-400 text-white dark:text-zinc-950 font-mono font-bold text-xs transition-all shadow-md shadow-emerald-500/20"
             >
               <Mail className="w-3.5 h-3.5" />
               <span>Hubungi Saya</span>
@@ -145,7 +145,7 @@ export default function ProfileCard({
 
             <Link
               href="/#projects"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-200 font-mono font-semibold text-xs border border-zinc-200 dark:border-zinc-700 transition-colors"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-200 font-mono font-semibold text-xs border border-zinc-200 dark:border-zinc-700 transition-colors"
             >
               <Code2 className="w-3.5 h-3.5" />
               <span>Lihat Project</span>
