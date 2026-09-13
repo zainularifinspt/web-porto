@@ -34,3 +34,6 @@ export async function getFeaturedProjects(): Promise<Project[]> {
   const projects = await getProjects();
   return projects.filter((p) => p.isFeatured);
 }
+
+export * from "./about";
+export * from "./schema";

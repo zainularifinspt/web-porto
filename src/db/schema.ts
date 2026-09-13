@@ -71,3 +71,83 @@ export interface ProjectWithDetails extends ProjectRow {
   technologies: string[];
   features?: ProjectFeatureRow[];
 }
+
+export interface AboutProfileRow {
+  id: string;
+  name: string;
+  headline: string;
+  bio: string; // JSON string or string array in JSON
+  photo_url: string;
+  avatar_fallback: string;
+  status: string;
+  location: string;
+  email: string;
+  github_url: string;
+  linkedin_url: string;
+  stats: string; // JSON string representing stats object
+  created_at: string;
+  updated_at: string;
+}
+
+export interface SkillCategoryRow {
+  id: string;
+  name: string;
+  icon_name: string;
+  sort_order: number;
+  created_at: string;
+}
+
+export interface SkillRow {
+  id: string;
+  category_id: string;
+  name: string;
+  level: "Beginner" | "Intermediate" | "Advanced" | "Expert";
+  years_of_exp: number;
+  description: string | null;
+  is_key: boolean;
+  sort_order: number;
+  created_at: string;
+}
+
+export interface ExperienceRow {
+  id: string;
+  role: string;
+  company: string;
+  location: string | null;
+  period: string;
+  is_current: boolean;
+  summary: string;
+  contributions: string; // JSON string array
+  technologies: string; // JSON string array
+  sort_order: number;
+  created_at: string;
+}
+
+export interface EducationRow {
+  id: string;
+  degree: string;
+  institution: string;
+  year: string;
+  focus: string;
+  sort_order: number;
+  created_at: string;
+}
+
+export interface AboutProfileUpdate {
+  name?: string;
+  headline?: string;
+  bio?: string[];
+  photo_url?: string;
+  avatar_fallback?: string;
+  status?: string;
+  location?: string;
+  email?: string;
+  github_url?: string;
+  linkedin_url?: string;
+  stats?: {
+    yearsOfExperience?: number;
+    completedProjects?: number;
+    codeCommits?: string;
+    clientSatisfaction?: string;
+  };
+}
