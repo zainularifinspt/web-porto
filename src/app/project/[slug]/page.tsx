@@ -23,6 +23,7 @@ import Navbar from "@/components/Navbar";
 import ProjectImageGallery from "@/components/ProjectImageGallery";
 import ProjectStoryAndRole from "@/components/ProjectStoryAndRole";
 import ProjectTechBadges from "@/components/ProjectTechBadges";
+import ProjectActionButtons from "@/components/ProjectActionButtons";
 
 interface PageProps {
   params: Promise<{
@@ -158,29 +159,14 @@ export default async function ProjectDetailPage({ params }: PageProps) {
           </div>
 
           {/* Action Links */}
-          <div className="mt-8 flex flex-wrap items-center gap-3">
-            {project.demoUrl && (
-              <a
-                href={project.demoUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 dark:bg-emerald-500 dark:hover:bg-emerald-400 text-white dark:text-zinc-950 font-mono font-bold text-xs transition-all shadow-lg shadow-emerald-500/20"
-              >
-                <ExternalLink className="w-4 h-4" />
-                Buka Live Demo
-              </a>
-            )}
-            {project.repoUrl && (
-              <a
-                href={project.repoUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-200 font-mono text-xs border border-zinc-200 dark:border-zinc-700 transition-colors"
-              >
-                <Code2 className="w-4 h-4" />
-                Lihat Repository Kode
-              </a>
-            )}
+          <div className="mt-8">
+            <ProjectActionButtons
+              demoUrl={project.demoUrl}
+              repoUrl={project.repoUrl}
+              title={project.title}
+              status={project.stats?.status}
+              stars={project.stats?.stars}
+            />
           </div>
         </div>
 
