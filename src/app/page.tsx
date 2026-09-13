@@ -6,6 +6,8 @@ import HeroTerminal from "@/components/HeroTerminal";
 import ProjectGallery from "@/components/ProjectGallery";
 import CollaborationCTA from "@/components/CollaborationCTA";
 import ScrollReveal from "@/components/ScrollReveal";
+import SectionDivider from "@/components/SectionDivider";
+import ScrollToTopButton from "@/components/ScrollToTopButton";
 import { getProjects, getAboutContent } from "@/db";
 import {
   Terminal,
@@ -20,6 +22,9 @@ import {
   ExternalLink,
   Layers,
   FileCode2,
+  FolderGit2,
+  UserCheck,
+  MailQuestion
 } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -42,7 +47,7 @@ export default async function Home() {
     <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 flex flex-col selection:bg-emerald-500 selection:text-zinc-950 transition-colors duration-200">
       <Navbar />
 
-      <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 space-y-16">
+      <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 space-y-12">
         {/* Developer System Status Ribbon */}
         <ScrollReveal animation="fade-down" delay={50}>
           <section className="flex flex-wrap items-center justify-between gap-3 p-3.5 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white/70 dark:bg-zinc-900/60 backdrop-blur-md shadow-xs text-xs font-mono">
@@ -139,15 +144,27 @@ export default async function Home() {
           </section>
         </ScrollReveal>
 
+        {/* Visual Divider: Galeri Karya */}
+        <SectionDivider
+          label="Galeri Proyek &amp; Implementasi Nyata"
+          icon={<FolderGit2 className="w-3 h-3 text-emerald-500" />}
+        />
+
         {/* Galeri Project (Main Feature) */}
-        <ScrollReveal animation="fade-up" delay={200}>
-          <section id="projects" className="space-y-6">
+        <ScrollReveal animation="fade-up" delay={150}>
+          <section id="projects" className="scroll-mt-24 space-y-6">
             <ProjectGallery initialProjects={projects} />
           </section>
         </ScrollReveal>
 
+        {/* Visual Divider: Filosofi Rekayasa */}
+        <SectionDivider
+          label="Prinsip Rekayasa Perangkat Lunak"
+          icon={<Code2 className="w-3 h-3 text-cyan-500" />}
+        />
+
         {/* Engineering Philosophy & Clean Code Pillars */}
-        <ScrollReveal animation="fade-up" delay={200}>
+        <ScrollReveal animation="fade-up" delay={150}>
           <section className="rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/60 p-6 sm:p-10 backdrop-blur-md shadow-sm space-y-8">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-200 dark:border-zinc-800 pb-6">
               <div>
@@ -205,9 +222,15 @@ export default async function Home() {
           </section>
         </ScrollReveal>
 
+        {/* Visual Divider: Profil */}
+        <SectionDivider
+          label="Tentang Pengembang"
+          icon={<UserCheck className="w-3 h-3 text-emerald-500" />}
+        />
+
         {/* Tentang Saya — Quick Snapshot Preview */}
-        <ScrollReveal animation="fade-up" delay={200}>
-          <section id="about" className="py-6">
+        <ScrollReveal animation="fade-up" delay={150}>
+          <section id="about" className="scroll-mt-24 py-2">
             <div className="rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/60 p-6 sm:p-10 backdrop-blur-md shadow-sm">
               <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 pb-6 border-b border-zinc-200 dark:border-zinc-800">
                 <div className="flex items-center gap-4">
@@ -264,13 +287,22 @@ export default async function Home() {
           </section>
         </ScrollReveal>
 
+        {/* Visual Divider: Ajakan Kolaborasi */}
+        <SectionDivider
+          label="Mulai Kolaborasi"
+          icon={<MailQuestion className="w-3 h-3 text-amber-500" />}
+        />
+
         {/* Seksi Kontak & Kolaborasi */}
-        <ScrollReveal animation="zoom-in" delay={200}>
-          <section id="contact">
+        <ScrollReveal animation="zoom-in" delay={150}>
+          <section id="contact" className="scroll-mt-24">
             <CollaborationCTA />
           </section>
         </ScrollReveal>
       </main>
+
+      {/* Floating Scroll To Top Button */}
+      <ScrollToTopButton />
 
       {/* Terminal-Inspired Developer Footer */}
       <footer className="border-t border-zinc-200 dark:border-zinc-900 bg-white/90 dark:bg-zinc-950/90 py-8 text-xs font-mono text-zinc-500 dark:text-zinc-400 transition-colors duration-200 mt-12">
