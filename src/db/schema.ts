@@ -151,3 +151,36 @@ export interface AboutProfileUpdate {
     clientSatisfaction?: string;
   };
 }
+
+export type ContactMessageCategory = "project" | "consultation" | "hire" | "general";
+export type ContactMessageStatus = "unread" | "read" | "replied" | "archived";
+
+export interface ContactMessageRow {
+  id: string;
+  name: string;
+  email: string;
+  subject: string;
+  category: ContactMessageCategory;
+  message: string;
+  status: ContactMessageStatus;
+  ip_address?: string | null;
+  user_agent?: string | null;
+  notes?: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ContactMessageInsert {
+  name: string;
+  email: string;
+  subject: string;
+  category?: ContactMessageCategory;
+  message: string;
+  ip_address?: string | null;
+  user_agent?: string | null;
+}
+
+export interface ContactMessageUpdate {
+  status?: ContactMessageStatus;
+  notes?: string | null;
+}
