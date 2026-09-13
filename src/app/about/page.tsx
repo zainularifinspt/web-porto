@@ -22,6 +22,7 @@ import Navbar from "@/components/Navbar";
 import ProfileCard from "@/components/ProfileCard";
 import SkillsSection from "@/components/SkillsSection";
 import ExperienceJourney from "@/components/ExperienceJourney";
+import CollaborationCTA from "@/components/CollaborationCTA";
 import { getAboutContent } from "@/db";
 import { MOCK_ABOUT } from "@/data/mockAbout";
 
@@ -135,22 +136,7 @@ export default async function AboutPage() {
         </div>
 
         {/* Bottom CTA Card */}
-        <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-gradient-to-r from-emerald-600 to-teal-700 text-white p-8 sm:p-10 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-6">
-          <div className="space-y-2 text-center sm:text-left">
-            <h3 className="text-xl sm:text-2xl font-bold font-mono">
-              Tertarik Berkolaborasi?
-            </h3>
-            <p className="text-emerald-100 text-xs sm:text-sm max-w-xl leading-relaxed">
-              Saya selalu terbuka untuk mendiskusikan posisi full-time, freelance, maupun konsultasi arsitektur sistem web modern.
-            </p>
-          </div>
-          <Link
-            href="/#contact"
-            className="shrink-0 px-6 py-3 rounded-xl bg-white text-zinc-950 hover:bg-emerald-50 font-mono font-bold text-xs transition-all shadow-lg"
-          >
-            Mulai Percakapan →
-          </Link>
-        </div>
+        <CollaborationCTA />
       </main>
     </div>
   );

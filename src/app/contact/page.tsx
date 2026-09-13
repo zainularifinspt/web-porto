@@ -20,6 +20,7 @@ import {
 import Navbar from "@/components/Navbar";
 import SocialLinksList from "@/components/SocialLinksList";
 import ContactMessageForm from "@/components/ContactMessageForm";
+import CollaborationCTA from "@/components/CollaborationCTA";
 import { MOCK_CONTACT } from "@/data/mockContact";
 
 export const metadata: Metadata = {
@@ -234,31 +235,8 @@ export default function ContactPage() {
           </div>
         </section>
 
-        {/* Footer Collaboration Banner */}
-        <section className="rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-gradient-to-r from-emerald-600 to-teal-700 text-white p-8 sm:p-10 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-6">
-          <div className="space-y-2 text-center sm:text-left">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-emerald-100 font-mono text-xs">
-              <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-              <span>Pekerjaan Kustom &amp; Kontrak</span>
-            </div>
-            <h3 className="text-xl sm:text-2xl font-bold font-mono">
-              Siap Memulai Proyek Bersama?
-            </h3>
-            <p className="text-emerald-100 text-xs sm:text-sm max-w-xl leading-relaxed">
-              Kirimkan brief singkat atau deskripsi ide Anda. Saya akan meninjau dan merespon kembali dengan estimasi solusi teknis dalam 24 jam.
-            </p>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-3 shrink-0">
-            <a
-              href={`mailto:${contact.email}`}
-              className="px-6 py-3 rounded-xl bg-white text-zinc-950 hover:bg-emerald-50 font-mono font-bold text-xs transition-all shadow-lg flex items-center gap-2"
-            >
-              <Mail className="w-4 h-4" />
-              <span>Kirim Email Langsung →</span>
-            </a>
-          </div>
-        </section>
+        {/* Footer Collaboration Call-To-Action Section */}
+        <CollaborationCTA />
       </main>
 
       {/* Terminal-Inspired Footer */}
