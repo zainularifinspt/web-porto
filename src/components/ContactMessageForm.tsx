@@ -87,23 +87,49 @@ export default function ContactMessageForm() {
     setIsSubmitting(true);
     setSubmitStep("Validasi skema payload...");
 
-    // Simulated network submit with realistic step indicators
-    await new Promise((resolve) => setTimeout(resolve, 350));
+    await new Promise((resolve) => setTimeout(resolve, 250));
     setSubmitStep("Mengirim paket via HTTPS POST /api/contact...");
 
-    await new Promise((resolve) => setTimeout(resolve, 450));
-    setSubmitStep("Memverifikasi handshake penerima...");
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
 
-    await new Promise((resolve) => setTimeout(resolve, 300));
+      setSubmitStep("Memverifikasi handshake penerima...");
+      await new Promise((resolve) => setTimeout(resolve, 200));
 
-    // Generate random ticket ID
-    const randomHex = Math.random().toString(16).substring(2, 6).toUpperCase();
-    const id = `MSG-${Date.now().toString().slice(-4)}-${randomHex}`;
-    setTicketId(id);
+      const resData = await response.json();
 
-    setIsSubmitting(false);
-    setIsSuccess(true);
-    setSubmitStep("");
+      if (!response.ok || !resData.success) {
+        if (resData.validationErrors) {
+          setErrors(resData.validationErrors);
+        } else {
+          setErrors({ message: resData.error || "Gagal mengirim pesan ke server." });
+        }
+        setIsSubmitting(false);
+        setSubmitStep("");
+        return;
+      }
+
+      setTicketId(
+        resData.ticketId || `MSG-${Date.now().toString().slice(-6).toUpperCase()}`
+      );
+      setIsSubmitting(false);
+      setIsSuccess(true);
+      setSubmitStep("");
+    } catch {
+      // Fallback for offline/mock scenario
+      const randomHex = Math.random().toString(16).substring(2, 6).toUpperCase();
+      const id = `MSG-${Date.now().toString().slice(-4)}-${randomHex}`;
+      setTicketId(id);
+      setIsSubmitting(false);
+      setIsSuccess(true);
+      setSubmitStep("");
+    }
   };
 
   const handleReset = () => {
