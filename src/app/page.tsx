@@ -3,11 +3,11 @@ import Navbar from "@/components/Navbar";
 import HeroTerminal from "@/components/HeroTerminal";
 import ProjectGallery from "@/components/ProjectGallery";
 import { MOCK_PROJECTS } from "@/data/mockProjects";
-import { Terminal, Mail, Cpu, Sparkles, Globe, Code } from "lucide-react";
+import { Terminal, Mail, Cpu, Sparkles } from "lucide-react";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col selection:bg-emerald-500 selection:text-zinc-950">
+    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 flex flex-col selection:bg-emerald-500 selection:text-zinc-950 transition-colors duration-200">
       <Navbar />
 
       <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 space-y-12">
@@ -18,25 +18,25 @@ export default function Home() {
         <ProjectGallery initialProjects={MOCK_PROJECTS} />
 
         {/* Tentang Saya (Stub Section for Next Phases) */}
-        <section id="about" className="py-12 border-t border-zinc-900">
-          <div className="rounded-2xl border border-zinc-800 bg-zinc-900/40 p-8 backdrop-blur-md">
+        <section id="about" className="py-12 border-t border-zinc-200 dark:border-zinc-900">
+          <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/40 p-8 shadow-sm dark:shadow-none backdrop-blur-md">
             <div className="flex items-center gap-2 mb-4">
-              <Cpu className="w-5 h-5 text-emerald-400" />
-              <h2 className="text-xl font-bold font-mono text-zinc-100">
+              <Cpu className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+              <h2 className="text-xl font-bold font-mono text-zinc-900 dark:text-zinc-100">
                 Tentang Saya
               </h2>
             </div>
-            <p className="text-sm text-zinc-400 font-mono leading-relaxed max-w-3xl mb-6">
+            <p className="text-sm text-zinc-600 dark:text-zinc-400 font-mono leading-relaxed max-w-3xl mb-6">
               Pengembang web yang berdedikasi membangun aplikasi modern dengan arsitektur bersih, performa tinggi, dan pengalaman pengguna yang luar biasa. Berpengalaman di ekosistem TypeScript, Next.js, dan cloud backend.
             </p>
             <div className="flex flex-wrap gap-2 text-xs font-mono">
-              <span className="px-3 py-1.5 rounded-lg bg-zinc-950 border border-zinc-800 text-emerald-400">
+              <span className="px-3 py-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-emerald-600 dark:text-emerald-400 font-medium">
                 ⚡ Full-Stack Developer
               </span>
-              <span className="px-3 py-1.5 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-300">
+              <span className="px-3 py-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300">
                 🚀 Problem Solver
               </span>
-              <span className="px-3 py-1.5 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-300">
+              <span className="px-3 py-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300">
                 🛠️ Open Source Enthusiast
               </span>
             </div>
@@ -44,21 +44,21 @@ export default function Home() {
         </section>
 
         {/* Kontak & Media Sosial (Stub Section) */}
-        <section id="contact" className="py-12 border-t border-zinc-900">
-          <div className="rounded-2xl border border-zinc-800 bg-gradient-to-r from-zinc-900/80 via-zinc-950 to-emerald-950/20 p-8 flex flex-col md:flex-row items-center justify-between gap-6">
+        <section id="contact" className="py-12 border-t border-zinc-200 dark:border-zinc-900">
+          <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-gradient-to-r from-white via-zinc-50 to-emerald-50/40 dark:from-zinc-900/80 dark:via-zinc-950 dark:to-emerald-950/20 p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm dark:shadow-none">
             <div>
-              <h2 className="text-xl font-bold font-mono text-zinc-100 mb-2 flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-emerald-400" />
+              <h2 className="text-xl font-bold font-mono text-zinc-900 dark:text-zinc-100 mb-2 flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                 Mari Bangun Sesuatu yang Hebat Bersama
               </h2>
-              <p className="text-xs text-zinc-400 font-mono">
+              <p className="text-xs text-zinc-600 dark:text-zinc-400 font-mono">
                 Punya ide proyek, tawaran kolaborasi, atau sekadar ingin berdiskusi teknologi? Hubungi saya.
               </p>
             </div>
             <div className="flex items-center gap-3">
               <a
                 href="mailto:contact@developer.dev"
-                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-mono font-bold text-xs transition-all shadow-md shadow-emerald-500/20"
+                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 dark:bg-emerald-500 dark:hover:bg-emerald-400 text-white dark:text-zinc-950 font-mono font-bold text-xs transition-all shadow-md shadow-emerald-500/20"
               >
                 <Mail className="w-4 h-4" />
                 Kirim Pesan
@@ -67,7 +67,7 @@ export default function Home() {
                 href="https://github.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-emerald-400 border border-zinc-800 transition-colors"
+                className="p-2.5 rounded-lg bg-zinc-100 dark:bg-zinc-900 hover:bg-zinc-200 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:text-emerald-600 dark:hover:text-emerald-400 border border-zinc-200 dark:border-zinc-800 transition-colors"
                 aria-label="GitHub Profile"
               >
                 <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
@@ -78,7 +78,7 @@ export default function Home() {
                 href="https://linkedin.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-emerald-400 border border-zinc-800 transition-colors"
+                className="p-2.5 rounded-lg bg-zinc-100 dark:bg-zinc-900 hover:bg-zinc-200 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:text-emerald-600 dark:hover:text-emerald-400 border border-zinc-200 dark:border-zinc-800 transition-colors"
                 aria-label="LinkedIn Profile"
               >
                 <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
@@ -91,13 +91,13 @@ export default function Home() {
       </main>
 
       {/* Terminal-Inspired Footer */}
-      <footer className="border-t border-zinc-900 bg-zinc-950/80 py-8 text-center text-xs font-mono text-zinc-400">
+      <footer className="border-t border-zinc-200 dark:border-zinc-900 bg-white/80 dark:bg-zinc-950/80 py-8 text-center text-xs font-mono text-zinc-500 dark:text-zinc-400 transition-colors duration-200">
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <Terminal className="w-4 h-4 text-emerald-500" />
-            <span>~/portfolio (main) — Dibuat dengan cinta &amp; kopi</span>
+            <Terminal className="w-4 h-4 text-emerald-600 dark:text-emerald-500" />
+            <span>~/portfolio (main) — Dibuat dengan dedikasi &amp; kopi</span>
           </div>
-          <div className="text-zinc-400 flex items-center gap-1">
+          <div className="flex items-center gap-1">
             <span>Powered by Next.js &amp; Tailwind CSS</span>
           </div>
         </div>
