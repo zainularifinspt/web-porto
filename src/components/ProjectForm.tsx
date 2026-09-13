@@ -1,11 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
-  Terminal,
   Save,
   ArrowLeft,
   Image as ImageIcon,
@@ -19,8 +18,12 @@ import {
   Tag,
   Star,
   Layers,
+  Info,
+  ExternalLink,
+  RotateCcw,
 } from "lucide-react";
 import { Project } from "@/types/project";
+import ToastNotification, { ToastType } from "@/components/ToastNotification";
 
 interface ProjectFormProps {
   initialData?: Partial<Project>;
@@ -35,6 +38,7 @@ export default function ProjectForm({
 }: ProjectFormProps) {
   const router = useRouter();
 
+  // Form Fields
   const [title, setTitle] = useState(initialData?.title || "");
   const [slug, setSlug] = useState(initialData?.slug || "");
   const [isSlugCustom, setIsSlugCustom] = useState(Boolean(initialData?.slug));
@@ -61,10 +65,43 @@ export default function ProjectForm({
   );
   const [newTechInput, setNewTechInput] = useState("");
 
-  // States
+  // Validation & Touched States
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [notification, setNotification] = useState<{ type: "success" | "error"; message: string } | null>(null);
+  const [isDirty, setIsDirty] = useState(false);
+
+  // Toast Notification State
+  const [toast, setToast] = useState<{
+    isOpen: boolean;
+    type: ToastType;
+    title: string;
+    message: string;
+  }>({
+    isOpen: false,
+    type: "info",
+    title: "",
+    message: "",
+  });
+
+  // Track dirty changes
+  useEffect(() => {
+    setIsDirty(true);
+  }, [
+    title,
+    slug,
+    summary,
+    story,
+    role,
+    demoUrl,
+    repoUrl,
+    thumbnailUrl,
+    isFeatured,
+    sortOrder,
+    status,
+    stars,
+    technologies,
+  ]);
 
   // Helper auto slugify
   const generateSlug = (text: string) => {
@@ -82,32 +119,181 @@ export default function ProjectForm({
     if (!isSlugCustom) {
       setSlug(generateSlug(val));
     }
-    if (errors.title) {
-      setErrors((prev) => ({ ...prev, title: "" }));
+    if (touched.title) {
+      validateField("title", val);
     }
+  };
+
+  const markTouched = (field: string) => {
+    setTouched((prev) => ({ ...prev, [field]: true }));
+  };
+
+  const validateField = (field: string, value: any): string => {
+    let error = "";
+    switch (field) {
+      case "title":
+        if (!value || !value.trim()) {
+          error = "Judul project wajib diisi.";
+        } else if (value.trim().length < 3) {
+          error = "Judul minimal 3 karakter.";
+        } else if (value.trim().length > 100) {
+          error = "Judul maksimal 100 karakter.";
+        }
+        break;
+      case "slug":
+        if (!value || !value.trim()) {
+          error = "Slug URL project wajib diisi.";
+        } else if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value.trim())) {
+          error = "Format slug tidak valid (hanya huruf kecil, angka, dan tanda minus '-').";
+        }
+        break;
+      case "summary":
+        if (!value || !value.trim()) {
+          error = "Ringkasan project wajib diisi.";
+        } else if (value.trim().length < 10) {
+          error = "Ringkasan minimal 10 karakter.";
+        } else if (value.trim().length > 250) {
+          error = "Ringkasan maksimal 250 karakter.";
+        }
+        break;
+      case "story":
+        if (!value || !value.trim()) {
+          error = "Latar belakang & cerita arsitektur wajib diisi.";
+        } else if (value.trim().length < 30) {
+          error = "Cerita engineering minimal 30 karakter agar informatif.";
+        }
+        break;
+      case "role":
+        if (!value || !value.trim()) {
+          error = "Peran pengembang wajib diisi.";
+        }
+        break;
+      case "thumbnailUrl":
+        if (!value || !value.trim()) {
+          error = "URL gambar sampul wajib diisi.";
+        } else if (
+          !value.startsWith("http://") &&
+          !value.startsWith("https://") &&
+          !value.startsWith("/")
+        ) {
+          error = "URL sampul harus diawali dengan https:// atau path / (misal: /images/...).";
+        }
+        break;
+      case "demoUrl":
+        if (
+          value &&
+          value.trim() &&
+          !value.startsWith("http://") &&
+          !value.startsWith("https://")
+        ) {
+          error = "URL demo harus diawali dengan http:// atau https://";
+        }
+        break;
+      case "repoUrl":
+        if (
+          value &&
+          value.trim() &&
+          !value.startsWith("http://") &&
+          !value.startsWith("https://")
+        ) {
+          error = "URL repositori harus diawali dengan http:// atau https://";
+        }
+        break;
+      case "technologies":
+        if (!Array.isArray(value) || value.length === 0) {
+          error = "Tambahkan minimal 1 teknologi untuk label stack.";
+        }
+        break;
+      case "sortOrder":
+        if (isNaN(Number(value)) || Number(value) < 1) {
+          error = "Urutan tampil harus berupa angka bulat positif (≥ 1).";
+        }
+        break;
+      case "stars":
+        if (isNaN(Number(value)) || Number(value) < 0) {
+          error = "Jumlah GitHub stars tidak boleh negatif.";
+        }
+        break;
+    }
+
+    setErrors((prev) => {
+      const updated = { ...prev };
+      if (error) {
+        updated[field] = error;
+      } else {
+        delete updated[field];
+      }
+      return updated;
+    });
+
+    return error;
   };
 
   const handleAddTech = () => {
     const trimmed = newTechInput.trim();
     if (trimmed && !technologies.includes(trimmed)) {
-      setTechnologies([...technologies, trimmed]);
+      const updated = [...technologies, trimmed];
+      setTechnologies(updated);
       setNewTechInput("");
+      validateField("technologies", updated);
     }
   };
 
   const handleRemoveTech = (techToRemove: string) => {
-    setTechnologies(technologies.filter((t) => t !== techToRemove));
+    const updated = technologies.filter((t) => t !== techToRemove);
+    setTechnologies(updated);
+    validateField("technologies", updated);
   };
 
-  const validate = (): boolean => {
+  const validateAll = (): boolean => {
     const errs: Record<string, string> = {};
+    const eTitle = validateField("title", title);
+    if (eTitle) errs.title = eTitle;
 
-    if (!title.trim()) errs.title = "Judul project wajib diisi";
-    if (!slug.trim()) errs.slug = "Slug URL project wajib diisi";
-    if (!summary.trim()) errs.summary = "Ringkasan project wajib diisi";
-    if (!story.trim()) errs.story = "Cerita/latar belakang project wajib diisi";
-    if (!thumbnailUrl.trim()) errs.thumbnailUrl = "URL thumbnail wajib diisi";
-    if (technologies.length === 0) errs.technologies = "Tambahkan minimal 1 teknologi";
+    const eSlug = validateField("slug", slug);
+    if (eSlug) errs.slug = eSlug;
+
+    const eSummary = validateField("summary", summary);
+    if (eSummary) errs.summary = eSummary;
+
+    const eStory = validateField("story", story);
+    if (eStory) errs.story = eStory;
+
+    const eRole = validateField("role", role);
+    if (eRole) errs.role = eRole;
+
+    const eThumb = validateField("thumbnailUrl", thumbnailUrl);
+    if (eThumb) errs.thumbnailUrl = eThumb;
+
+    const eDemo = validateField("demoUrl", demoUrl);
+    if (eDemo) errs.demoUrl = eDemo;
+
+    const eRepo = validateField("repoUrl", repoUrl);
+    if (eRepo) errs.repoUrl = eRepo;
+
+    const eTech = validateField("technologies", technologies);
+    if (eTech) errs.technologies = eTech;
+
+    const eSort = validateField("sortOrder", sortOrder);
+    if (eSort) errs.sortOrder = eSort;
+
+    const eStars = validateField("stars", stars);
+    if (eStars) errs.stars = eStars;
+
+    // Mark all as touched
+    setTouched({
+      title: true,
+      slug: true,
+      summary: true,
+      story: true,
+      role: true,
+      thumbnailUrl: true,
+      demoUrl: true,
+      repoUrl: true,
+      technologies: true,
+      sortOrder: true,
+      stars: true,
+    });
 
     setErrors(errs);
     return Object.keys(errs).length === 0;
@@ -116,30 +302,39 @@ export default function ProjectForm({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!validate()) {
-      setNotification({
+    const isValid = validateAll();
+
+    if (!isValid) {
+      setToast({
+        isOpen: true,
         type: "error",
-        message: "Mohon lengkapi formulir dengan data yang valid.",
+        title: "Validasi Formulir Gagal",
+        message:
+          "Mohon periksa kolom bertanda merah di bawah dan perbaiki isian data sebelum menyimpan.",
       });
+      // Scroll to error summary
+      const errBanner = document.getElementById("form-error-banner");
+      if (errBanner) {
+        errBanner.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
       return;
     }
 
     setIsSubmitting(true);
-    setNotification(null);
 
-    // Simulate saving project data
-    await new Promise((resolve) => setTimeout(resolve, 600));
+    // Simulate saving project data with realistic latency
+    await new Promise((resolve) => setTimeout(resolve, 700));
 
     const savedProject: Project = {
       id: initialData?.id || `proj-${Date.now()}`,
-      title,
-      slug,
-      summary,
-      story,
-      role,
+      title: title.trim(),
+      slug: slug.trim(),
+      summary: summary.trim(),
+      story: story.trim(),
+      role: role.trim(),
       demoUrl: demoUrl.trim() || undefined,
       repoUrl: repoUrl.trim() || undefined,
-      thumbnailUrl,
+      thumbnailUrl: thumbnailUrl.trim(),
       isFeatured,
       sortOrder: Number(sortOrder),
       createdAt: initialData?.createdAt || new Date().toISOString(),
@@ -152,11 +347,12 @@ export default function ProjectForm({
     };
 
     setIsSubmitting(false);
-    setNotification({
+
+    setToast({
+      isOpen: true,
       type: "success",
-      message: isEdit
-        ? `Project "${title}" berhasil diperbarui!`
-        : `Project baru "${title}" berhasil dibuat!`,
+      title: isEdit ? "Project Berhasil Diperbarui" : "Project Berhasil Ditambahkan",
+      message: `Data untuk "${title}" telah disimpan ke katalog portofolio. Mengalihkan ke dashboard...`,
     });
 
     if (onSuccess) {
@@ -165,11 +361,22 @@ export default function ProjectForm({
 
     setTimeout(() => {
       router.push("/admin");
-    }, 900);
+    }, 1200);
   };
+
+  const errorCount = Object.keys(errors).length;
 
   return (
     <div className="space-y-6">
+      {/* Toast Notification Container */}
+      <ToastNotification
+        isOpen={toast.isOpen}
+        type={toast.type}
+        title={toast.title}
+        message={toast.message}
+        onClose={() => setToast((prev) => ({ ...prev, isOpen: false }))}
+      />
+
       {/* Header & Back Action */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-zinc-200 dark:border-zinc-800">
         <Link
@@ -180,73 +387,100 @@ export default function ProjectForm({
           <span>Kembali ke Daftar Project</span>
         </Link>
 
-        <span className="font-mono text-xs text-zinc-400">
-          mode: {isEdit ? "edit-project" : "create-project"}
-        </span>
+        <div className="flex items-center gap-2">
+          {isDirty && (
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-mono bg-amber-500/10 border border-amber-500/20 text-amber-600 dark:text-amber-400">
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
+              Perubahan belum disimpan
+            </span>
+          )}
+          <span className="font-mono text-xs text-zinc-400">
+            mode: {isEdit ? "edit-project" : "create-project"}
+          </span>
+        </div>
       </div>
 
-      {/* Notification */}
-      {notification && (
+      {/* Form-level Error Alert Banner */}
+      {errorCount > 0 && (
         <div
-          className={`p-4 rounded-xl text-xs font-mono flex items-center justify-between gap-3 shadow-sm animate-in fade-in ${
-            notification.type === "success"
-              ? "bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300"
-              : "bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 text-rose-700 dark:text-rose-300"
-          }`}
+          id="form-error-banner"
+          className="p-5 rounded-2xl bg-rose-500/10 border border-rose-500/20 dark:border-rose-500/30 text-rose-700 dark:text-rose-300 font-mono text-xs space-y-3 shadow-sm animate-in fade-in"
         >
-          <div className="flex items-center gap-2">
-            {notification.type === "success" ? (
-              <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
-            ) : (
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2 font-bold">
               <AlertCircle className="w-4 h-4 text-rose-500 shrink-0" />
-            )}
-            <span>{notification.message}</span>
+              <span>Terdapat {errorCount} kesalahan pengisian formulir:</span>
+            </div>
+            <span className="px-2 py-0.5 rounded text-[10px] bg-rose-500/20 border border-rose-500/30">
+              HTTP 422 Unprocessable Entity
+            </span>
           </div>
-          <button
-            onClick={() => setNotification(null)}
-            className="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200"
-          >
-            ✕
-          </button>
+
+          <ul className="list-disc list-inside space-y-1 text-[11px] text-rose-600 dark:text-rose-300/90 pl-1 font-sans">
+            {Object.entries(errors).map(([key, msg]) => (
+              <li key={key}>
+                <span className="font-mono font-semibold">{key}</span>: {msg}
+              </li>
+            ))}
+          </ul>
         </div>
       )}
 
       {/* Main Form */}
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-6" noValidate>
         <div className="rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/70 p-6 sm:p-8 backdrop-blur-md shadow-sm space-y-6">
-          <div className="border-b border-zinc-200 dark:border-zinc-800 pb-4">
-            <h2 className="text-xl font-bold font-mono text-zinc-900 dark:text-zinc-100">
-              {isEdit ? "Ubah Detail Project" : "Tambah Project Baru"}
-            </h2>
-            <p className="text-xs font-mono text-zinc-500 dark:text-zinc-400">
-              // Konfigurasi metadata, cerita arsitektur, dan tautan demo
-            </p>
+          <div className="border-b border-zinc-200 dark:border-zinc-800 pb-4 flex items-center justify-between">
+            <div>
+              <h2 className="text-xl font-bold font-mono text-zinc-900 dark:text-zinc-100">
+                {isEdit ? "Ubah Detail Project" : "Tambah Project Baru"}
+              </h2>
+              <p className="text-xs font-mono text-zinc-500 dark:text-zinc-400 mt-0.5">
+                // Lengkapi metadata, teknologi, dan tautan demo portofolio
+              </p>
+            </div>
+            <div className="hidden sm:block">
+              <span className="px-3 py-1 rounded-lg border border-zinc-200 dark:border-zinc-800 font-mono text-[10px] text-zinc-500">
+                * Kolom wajib diisi
+              </span>
+            </div>
           </div>
 
           {/* Grid Inputs: Title & Slug */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {/* Title */}
             <div className="space-y-1.5">
-              <label
-                htmlFor="proj-title"
-                className="block text-xs font-mono font-semibold text-zinc-700 dark:text-zinc-300"
-              >
-                Judul Project <span className="text-rose-500">*</span>
-              </label>
+              <div className="flex items-center justify-between">
+                <label
+                  htmlFor="proj-title"
+                  className="block text-xs font-mono font-semibold text-zinc-700 dark:text-zinc-300"
+                >
+                  Judul Project <span className="text-rose-500">*</span>
+                </label>
+                <span className="text-[10px] font-mono text-zinc-400">
+                  {title.length}/100
+                </span>
+              </div>
               <input
                 id="proj-title"
                 type="text"
                 placeholder="Contoh: DevPulse Server Monitor"
                 value={title}
                 onChange={handleTitleChange}
-                className={`w-full px-3.5 py-2.5 rounded-xl border font-sans text-sm bg-white dark:bg-zinc-950 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500/20 ${
-                  errors.title
-                    ? "border-rose-500 text-rose-600"
-                    : "border-zinc-200 dark:border-zinc-800 focus:border-emerald-500"
+                onBlur={() => {
+                  markTouched("title");
+                  validateField("title", title);
+                }}
+                className={`w-full px-3.5 py-2.5 rounded-xl border font-sans text-sm bg-white dark:bg-zinc-950 transition-colors focus:outline-none focus:ring-2 ${
+                  errors.title && touched.title
+                    ? "border-rose-500 text-rose-600 dark:text-rose-400 ring-rose-500/20"
+                    : "border-zinc-200 dark:border-zinc-800 focus:border-emerald-500 focus:ring-emerald-500/20"
                 }`}
               />
-              {errors.title && (
-                <p className="text-xs font-mono text-rose-500">{errors.title}</p>
+              {errors.title && touched.title && (
+                <p className="text-xs font-mono text-rose-500 flex items-center gap-1 mt-1">
+                  <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                  <span>{errors.title}</span>
+                </p>
               )}
             </div>
 
@@ -264,7 +498,7 @@ export default function ProjectForm({
                   onClick={() => setIsSlugCustom(!isSlugCustom)}
                   className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 hover:underline"
                 >
-                  {isSlugCustom ? "Mode Otomatis" : "Edit Manual"}
+                  {isSlugCustom ? "Gunakan Auto-Slug" : "Edit Manual"}
                 </button>
               </div>
               <input
@@ -273,11 +507,26 @@ export default function ProjectForm({
                 placeholder="devpulse-server-monitor"
                 value={slug}
                 disabled={!isSlugCustom}
-                onChange={(e) => setSlug(generateSlug(e.target.value))}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 font-mono text-xs bg-zinc-50 dark:bg-zinc-950 focus:border-emerald-500 focus:outline-none disabled:opacity-75"
+                onChange={(e) => {
+                  const val = generateSlug(e.target.value);
+                  setSlug(val);
+                  if (touched.slug) validateField("slug", val);
+                }}
+                onBlur={() => {
+                  markTouched("slug");
+                  validateField("slug", slug);
+                }}
+                className={`w-full px-3.5 py-2.5 rounded-xl border font-mono text-xs bg-zinc-50 dark:bg-zinc-950 focus:outline-none disabled:opacity-75 ${
+                  errors.slug && touched.slug
+                    ? "border-rose-500 text-rose-600 dark:text-rose-400 ring-rose-500/20"
+                    : "border-zinc-200 dark:border-zinc-800 focus:border-emerald-500"
+                }`}
               />
-              {errors.slug && (
-                <p className="text-xs font-mono text-rose-500">{errors.slug}</p>
+              {errors.slug && touched.slug && (
+                <p className="text-xs font-mono text-rose-500 flex items-center gap-1 mt-1">
+                  <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                  <span>{errors.slug}</span>
+                </p>
               )}
             </div>
           </div>
@@ -296,9 +545,26 @@ export default function ProjectForm({
                 type="text"
                 placeholder="Lead Full-Stack Architect"
                 value={role}
-                onChange={(e) => setRole(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 font-sans text-sm bg-white dark:bg-zinc-950 focus:border-emerald-500 focus:outline-none"
+                onChange={(e) => {
+                  setRole(e.target.value);
+                  if (touched.role) validateField("role", e.target.value);
+                }}
+                onBlur={() => {
+                  markTouched("role");
+                  validateField("role", role);
+                }}
+                className={`w-full px-3.5 py-2.5 rounded-xl border font-sans text-sm bg-white dark:bg-zinc-950 focus:outline-none ${
+                  errors.role && touched.role
+                    ? "border-rose-500 text-rose-600 dark:text-rose-400"
+                    : "border-zinc-200 dark:border-zinc-800 focus:border-emerald-500"
+                }`}
               />
+              {errors.role && touched.role && (
+                <p className="text-xs font-mono text-rose-500 flex items-center gap-1 mt-1">
+                  <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                  <span>{errors.role}</span>
+                </p>
+              )}
             </div>
 
             <div className="space-y-1.5">
@@ -324,43 +590,89 @@ export default function ProjectForm({
 
           {/* Summary */}
           <div className="space-y-1.5">
-            <label
-              htmlFor="proj-summary"
-              className="block text-xs font-mono font-semibold text-zinc-700 dark:text-zinc-300"
-            >
-              Ringkasan Singkat (Summary) <span className="text-rose-500">*</span>
-            </label>
+            <div className="flex items-center justify-between">
+              <label
+                htmlFor="proj-summary"
+                className="block text-xs font-mono font-semibold text-zinc-700 dark:text-zinc-300"
+              >
+                Ringkasan Singkat (Summary) <span className="text-rose-500">*</span>
+              </label>
+              <span
+                className={`text-[10px] font-mono ${
+                  summary.length > 250
+                    ? "text-rose-500 font-bold"
+                    : summary.length > 220
+                    ? "text-amber-500"
+                    : "text-zinc-400"
+                }`}
+              >
+                {summary.length}/250
+              </span>
+            </div>
             <input
               id="proj-summary"
               type="text"
-              placeholder="Deskripsi singkat yang tampil pada kartu galeri..."
+              placeholder="Deskripsi singkat yang tampil pada kartu galeri beranda..."
               value={summary}
-              onChange={(e) => setSummary(e.target.value)}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 font-sans text-sm bg-white dark:bg-zinc-950 focus:border-emerald-500 focus:outline-none"
+              onChange={(e) => {
+                setSummary(e.target.value);
+                if (touched.summary) validateField("summary", e.target.value);
+              }}
+              onBlur={() => {
+                markTouched("summary");
+                validateField("summary", summary);
+              }}
+              className={`w-full px-3.5 py-2.5 rounded-xl border font-sans text-sm bg-white dark:bg-zinc-950 focus:outline-none ${
+                errors.summary && touched.summary
+                  ? "border-rose-500 text-rose-600 dark:text-rose-400"
+                  : "border-zinc-200 dark:border-zinc-800 focus:border-emerald-500"
+              }`}
             />
-            {errors.summary && (
-              <p className="text-xs font-mono text-rose-500">{errors.summary}</p>
+            {errors.summary && touched.summary && (
+              <p className="text-xs font-mono text-rose-500 flex items-center gap-1 mt-1">
+                <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                <span>{errors.summary}</span>
+              </p>
             )}
           </div>
 
           {/* Story */}
           <div className="space-y-1.5">
-            <label
-              htmlFor="proj-story"
-              className="block text-xs font-mono font-semibold text-zinc-700 dark:text-zinc-300"
-            >
-              Latar Belakang &amp; Cerita Engineering (Story) <span className="text-rose-500">*</span>
-            </label>
+            <div className="flex items-center justify-between">
+              <label
+                htmlFor="proj-story"
+                className="block text-xs font-mono font-semibold text-zinc-700 dark:text-zinc-300"
+              >
+                Latar Belakang &amp; Cerita Engineering (Story) <span className="text-rose-500">*</span>
+              </label>
+              <span className="text-[10px] font-mono text-zinc-400">
+                {story.length} karakter (min. 30)
+              </span>
+            </div>
             <textarea
               id="proj-story"
               rows={5}
-              placeholder="Jelaskan masalah yang diselesaikan, arsitektur yang dipilih, serta tantangan teknis yang berhasil diatasi..."
+              placeholder="Jelaskan masalah yang diselesaikan, arsitektur teknis yang dipilih, dan tantangan yang dipecahkan..."
               value={story}
-              onChange={(e) => setStory(e.target.value)}
-              className="w-full p-3.5 rounded-xl border border-zinc-200 dark:border-zinc-800 font-sans text-sm bg-white dark:bg-zinc-950 focus:border-emerald-500 focus:outline-none leading-relaxed"
+              onChange={(e) => {
+                setStory(e.target.value);
+                if (touched.story) validateField("story", e.target.value);
+              }}
+              onBlur={() => {
+                markTouched("story");
+                validateField("story", story);
+              }}
+              className={`w-full p-3.5 rounded-xl border font-sans text-sm bg-white dark:bg-zinc-950 focus:outline-none leading-relaxed ${
+                errors.story && touched.story
+                  ? "border-rose-500 text-rose-600 dark:text-rose-400"
+                  : "border-zinc-200 dark:border-zinc-800 focus:border-emerald-500"
+              }`}
             />
-            {errors.story && (
-              <p className="text-xs font-mono text-rose-500">{errors.story}</p>
+            {errors.story && touched.story && (
+              <p className="text-xs font-mono text-rose-500 flex items-center gap-1 mt-1">
+                <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                <span>{errors.story}</span>
+              </p>
             )}
           </div>
 
@@ -372,7 +684,7 @@ export default function ProjectForm({
             <div className="flex items-center gap-2">
               <input
                 type="text"
-                placeholder="Ketik nama teknologi (misal: Docker) lalu tekan Tambah..."
+                placeholder="Ketik nama teknologi (misal: Docker, Redis) lalu tekan Tambah..."
                 value={newTechInput}
                 onChange={(e) => setNewTechInput(e.target.value)}
                 onKeyDown={(e) => {
@@ -404,7 +716,7 @@ export default function ProjectForm({
                   <button
                     type="button"
                     onClick={() => handleRemoveTech(tech)}
-                    className="p-0.5 hover:text-rose-500"
+                    className="p-0.5 hover:text-rose-500 transition-colors"
                     title={`Hapus ${tech}`}
                   >
                     <X className="w-3 h-3" />
@@ -412,8 +724,11 @@ export default function ProjectForm({
                 </span>
               ))}
             </div>
-            {errors.technologies && (
-              <p className="text-xs font-mono text-rose-500">{errors.technologies}</p>
+            {errors.technologies && touched.technologies && (
+              <p className="text-xs font-mono text-rose-500 flex items-center gap-1 mt-1">
+                <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                <span>{errors.technologies}</span>
+              </p>
             )}
           </div>
 
@@ -424,16 +739,33 @@ export default function ProjectForm({
                 htmlFor="proj-demo"
                 className="block text-xs font-mono font-semibold text-zinc-700 dark:text-zinc-300"
               >
-                Tautan Demo (URL)
+                Tautan Demo Live (URL)
               </label>
               <input
                 id="proj-demo"
                 type="url"
                 placeholder="https://demo.project.dev"
                 value={demoUrl}
-                onChange={(e) => setDemoUrl(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 font-mono text-xs bg-white dark:bg-zinc-950 focus:border-emerald-500 focus:outline-none"
+                onChange={(e) => {
+                  setDemoUrl(e.target.value);
+                  if (touched.demoUrl) validateField("demoUrl", e.target.value);
+                }}
+                onBlur={() => {
+                  markTouched("demoUrl");
+                  validateField("demoUrl", demoUrl);
+                }}
+                className={`w-full px-3.5 py-2.5 rounded-xl border font-mono text-xs bg-white dark:bg-zinc-950 focus:outline-none ${
+                  errors.demoUrl && touched.demoUrl
+                    ? "border-rose-500 text-rose-600 dark:text-rose-400"
+                    : "border-zinc-200 dark:border-zinc-800 focus:border-emerald-500"
+                }`}
               />
+              {errors.demoUrl && touched.demoUrl && (
+                <p className="text-xs font-mono text-rose-500 flex items-center gap-1 mt-1">
+                  <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                  <span>{errors.demoUrl}</span>
+                </p>
+              )}
             </div>
 
             <div className="space-y-1.5">
@@ -441,16 +773,33 @@ export default function ProjectForm({
                 htmlFor="proj-repo"
                 className="block text-xs font-mono font-semibold text-zinc-700 dark:text-zinc-300"
               >
-                Tautan Repositori / Kode (URL)
+                Tautan Repositori / GitHub (URL)
               </label>
               <input
                 id="proj-repo"
                 type="url"
                 placeholder="https://github.com/developer/project"
                 value={repoUrl}
-                onChange={(e) => setRepoUrl(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 font-mono text-xs bg-white dark:bg-zinc-950 focus:border-emerald-500 focus:outline-none"
+                onChange={(e) => {
+                  setRepoUrl(e.target.value);
+                  if (touched.repoUrl) validateField("repoUrl", e.target.value);
+                }}
+                onBlur={() => {
+                  markTouched("repoUrl");
+                  validateField("repoUrl", repoUrl);
+                }}
+                className={`w-full px-3.5 py-2.5 rounded-xl border font-mono text-xs bg-white dark:bg-zinc-950 focus:outline-none ${
+                  errors.repoUrl && touched.repoUrl
+                    ? "border-rose-500 text-rose-600 dark:text-rose-400"
+                    : "border-zinc-200 dark:border-zinc-800 focus:border-emerald-500"
+                }`}
               />
+              {errors.repoUrl && touched.repoUrl && (
+                <p className="text-xs font-mono text-rose-500 flex items-center gap-1 mt-1">
+                  <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                  <span>{errors.repoUrl}</span>
+                </p>
+              )}
             </div>
           </div>
 
@@ -464,23 +813,48 @@ export default function ProjectForm({
             </label>
             <input
               id="proj-thumb"
-              type="url"
+              type="text"
+              placeholder="https://images.unsplash.com/... atau /images/cover.png"
               value={thumbnailUrl}
-              onChange={(e) => setThumbnailUrl(e.target.value)}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 font-mono text-xs bg-white dark:bg-zinc-950 focus:border-emerald-500 focus:outline-none"
+              onChange={(e) => {
+                setThumbnailUrl(e.target.value);
+                if (touched.thumbnailUrl) validateField("thumbnailUrl", e.target.value);
+              }}
+              onBlur={() => {
+                markTouched("thumbnailUrl");
+                validateField("thumbnailUrl", thumbnailUrl);
+              }}
+              className={`w-full px-3.5 py-2.5 rounded-xl border font-mono text-xs bg-white dark:bg-zinc-950 focus:outline-none ${
+                errors.thumbnailUrl && touched.thumbnailUrl
+                  ? "border-rose-500 text-rose-600 dark:text-rose-400"
+                  : "border-zinc-200 dark:border-zinc-800 focus:border-emerald-500"
+              }`}
             />
+            {errors.thumbnailUrl && touched.thumbnailUrl && (
+              <p className="text-xs font-mono text-rose-500 flex items-center gap-1 mt-1">
+                <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                <span>{errors.thumbnailUrl}</span>
+              </p>
+            )}
 
             {/* Thumbnail Preview */}
             {thumbnailUrl && (
-              <div className="relative w-full max-w-sm h-40 rounded-xl overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-zinc-900 mt-2">
+              <div className="relative w-full max-w-sm h-44 rounded-xl overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-zinc-900 mt-2">
                 <Image
                   src={thumbnailUrl}
                   alt="Pratinjau Sampul"
                   fill
                   className="object-cover"
                   sizes="400px"
+                  onError={() => {
+                    setErrors((prev) => ({
+                      ...prev,
+                      thumbnailUrl: "URL gambar tidak dapat dimuat atau tidak valid.",
+                    }));
+                  }}
                 />
-                <span className="absolute bottom-2 left-2 px-2 py-1 rounded bg-black/60 text-white font-mono text-[10px] backdrop-blur-sm">
+                <span className="absolute bottom-2 left-2 px-2 py-1 rounded bg-black/70 text-white font-mono text-[10px] backdrop-blur-sm flex items-center gap-1">
+                  <ImageIcon className="w-3 h-3 text-emerald-400" />
                   Pratinjau Sampul
                 </span>
               </div>
@@ -499,11 +873,16 @@ export default function ProjectForm({
                 className="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500"
               />
               <label htmlFor="proj-featured" className="cursor-pointer">
-                <div className="text-xs font-mono font-bold text-zinc-900 dark:text-zinc-100">
+                <div className="text-xs font-mono font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1">
+                  <Star
+                    className={`w-3.5 h-3.5 ${
+                      isFeatured ? "text-amber-400 fill-amber-400" : "text-zinc-400"
+                    }`}
+                  />
                   Project Unggulan
                 </div>
                 <div className="text-[10px] text-zinc-500">
-                  Sorot di beranda utama
+                  Sorot di beranda portofolio
                 </div>
               </label>
             </div>
@@ -519,10 +898,22 @@ export default function ProjectForm({
               <input
                 id="proj-order"
                 type="number"
+                min="1"
                 value={sortOrder}
-                onChange={(e) => setSortOrder(Number(e.target.value))}
-                className="w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-800 font-mono text-xs bg-white dark:bg-zinc-950"
+                onChange={(e) => {
+                  const val = Number(e.target.value);
+                  setSortOrder(val);
+                  validateField("sortOrder", val);
+                }}
+                className={`w-full px-3 py-2 rounded-xl border font-mono text-xs bg-white dark:bg-zinc-950 ${
+                  errors.sortOrder
+                    ? "border-rose-500 text-rose-600"
+                    : "border-zinc-200 dark:border-zinc-800 focus:border-emerald-500"
+                }`}
               />
+              {errors.sortOrder && (
+                <p className="text-[10px] font-mono text-rose-500">{errors.sortOrder}</p>
+              )}
             </div>
 
             {/* Stars */}
@@ -536,16 +927,28 @@ export default function ProjectForm({
               <input
                 id="proj-stars"
                 type="number"
+                min="0"
                 value={stars}
-                onChange={(e) => setStars(Number(e.target.value))}
-                className="w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-800 font-mono text-xs bg-white dark:bg-zinc-950"
+                onChange={(e) => {
+                  const val = Number(e.target.value);
+                  setStars(val);
+                  validateField("stars", val);
+                }}
+                className={`w-full px-3 py-2 rounded-xl border font-mono text-xs bg-white dark:bg-zinc-950 ${
+                  errors.stars
+                    ? "border-rose-500 text-rose-600"
+                    : "border-zinc-200 dark:border-zinc-800 focus:border-emerald-500"
+                }`}
               />
+              {errors.stars && (
+                <p className="text-[10px] font-mono text-rose-500">{errors.stars}</p>
+              )}
             </div>
           </div>
         </div>
 
         {/* Action Buttons */}
-        <div className="flex items-center justify-end gap-3 pt-2">
+        <div className="flex items-center justify-between pt-2">
           <Link
             href="/admin"
             className="px-5 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 font-mono text-xs transition-colors"
@@ -553,23 +956,25 @@ export default function ProjectForm({
             Batal
           </Link>
 
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 dark:bg-emerald-500 dark:hover:bg-emerald-400 text-white dark:text-zinc-950 font-mono font-bold text-xs transition-all shadow-md shadow-emerald-500/20 disabled:opacity-50"
-          >
-            {isSubmitting ? (
-              <>
-                <Loader2 className="w-4 h-4 animate-spin" />
-                <span>Menyimpan...</span>
-              </>
-            ) : (
-              <>
-                <Save className="w-4 h-4" />
-                <span>{isEdit ? "Simpan Perubahan" : "Buat Project"}</span>
-              </>
-            )}
-          </button>
+          <div className="flex items-center gap-3">
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 dark:bg-emerald-500 dark:hover:bg-emerald-400 text-white dark:text-zinc-950 font-mono font-bold text-xs transition-all shadow-md shadow-emerald-500/20 disabled:opacity-50"
+            >
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <span>Menyimpan ke Database...</span>
+                </>
+              ) : (
+                <>
+                  <Save className="w-4 h-4" />
+                  <span>{isEdit ? "Simpan Perubahan" : "Simpan Project Baru"}</span>
+                </>
+              )}
+            </button>
+          </div>
         </div>
       </form>
     </div>

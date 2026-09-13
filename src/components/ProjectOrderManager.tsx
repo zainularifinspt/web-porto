@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { Project } from "@/types/project";
 import { MOCK_PROJECTS } from "@/data/mockProjects";
+import ToastNotification, { ToastType } from "@/components/ToastNotification";
 
 interface ProjectOrderManagerProps {
   initialProjects?: Project[];
@@ -41,7 +42,17 @@ export default function ProjectOrderManager({
 
   const [projects, setProjects] = useState<Project[]>(getInitialSorted);
   const [isSaving, setIsSaving] = useState(false);
-  const [notification, setNotification] = useState<string | null>(null);
+  const [toast, setToast] = useState<{
+    isOpen: boolean;
+    type: ToastType;
+    title: string;
+    message: string;
+  }>({
+    isOpen: false,
+    type: "info",
+    title: "",
+    message: "",
+  });
 
   // Move item up in the list
   const moveItem = (index: number, direction: "up" | "down") => {
@@ -76,32 +87,47 @@ export default function ProjectOrderManager({
   // Reset to original mock order
   const handleReset = () => {
     setProjects(getInitialSorted());
-    setNotification("Susunan urutan dikembalikan ke default.");
-    setTimeout(() => setNotification(null), 3000);
+    setToast({
+      isOpen: true,
+      type: "info",
+      title: "Urutan Direset",
+      message: "Susunan urutan project berhasil dikembalikan ke format awal.",
+    });
   };
 
   // Save new ordering
   const handleSave = async () => {
     setIsSaving(true);
-    setNotification(null);
 
     // Simulate saving updated ordering
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    await new Promise((resolve) => setTimeout(resolve, 600));
 
     setIsSaving(false);
-    setNotification("Susunan urutan & status unggulan berhasil disimpan!");
+    setToast({
+      isOpen: true,
+      type: "success",
+      title: "Perubahan Urutan Disimpan",
+      message: "Susunan urutan dan prioritas project unggulan berhasil diperbarui!",
+    });
 
     if (onSave) {
       onSave(projects);
     }
-
-    setTimeout(() => setNotification(null), 4000);
   };
 
   const featuredCount = projects.filter((p) => p.isFeatured).length;
 
   return (
     <div className="space-y-6">
+      {/* Toast Notification */}
+      <ToastNotification
+        isOpen={toast.isOpen}
+        type={toast.type}
+        title={toast.title}
+        message={toast.message}
+        onClose={() => setToast((prev) => ({ ...prev, isOpen: false }))}
+      />
+
       {/* Header and Back Link */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-zinc-200 dark:border-zinc-800">
         <Link
@@ -117,22 +143,6 @@ export default function ProjectOrderManager({
           <span>Unggulan Aktif: {featuredCount} dari {projects.length} project</span>
         </div>
       </div>
-
-      {/* Action Notification */}
-      {notification && (
-        <div className="p-4 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-800 text-xs font-mono text-emerald-700 dark:text-emerald-300 flex items-center justify-between gap-3 shadow-sm animate-in fade-in">
-          <div className="flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
-            <span>{notification}</span>
-          </div>
-          <button
-            onClick={() => setNotification(null)}
-            className="text-xs text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200"
-          >
-            ✕
-          </button>
-        </div>
-      )}
 
       {/* Main Container */}
       <div className="rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/70 p-6 sm:p-8 backdrop-blur-md shadow-sm space-y-6">

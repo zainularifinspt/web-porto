@@ -1,6 +1,6 @@
 {
   "repo": "Web Portofolio",
-  "generatedForCommit": "fadc4b146dbcd3aec3ccb0310da5eda9476c2a14",
+  "generatedForCommit": "6eaa179d3730d84897ffc348b9864b0d4ebc8b25",
   "files": [
     {
       "path": ".claude/skills/ngodingpakeai/SKILL.md",
@@ -82,9 +82,9 @@
     },
     {
       "path": "src/app/admin/layout.tsx",
-      "reason": "needs_summary",
+      "reason": "changed",
       "language": "typescript",
-      "size": 9861
+      "size": 10023
     },
     {
       "path": "src/app/admin/login/page.tsx",
@@ -94,21 +94,27 @@
     },
     {
       "path": "src/app/admin/page.tsx",
-      "reason": "needs_summary",
+      "reason": "changed",
       "language": "typescript",
-      "size": 15482
+      "size": 15955
     },
     {
       "path": "src/app/admin/projects/[id]/edit/page.tsx",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 726
     },
     {
       "path": "src/app/admin/projects/new/page.tsx",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 239
+    },
+    {
+      "path": "src/app/admin/reorder/page.tsx",
+      "reason": "new",
+      "language": "typescript",
+      "size": 389
     },
     {
       "path": "src/app/api/about/route.ts",
@@ -232,7 +238,7 @@
     },
     {
       "path": "src/components/ProjectForm.tsx",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 22954
     },
@@ -247,6 +253,12 @@
       "reason": "needs_summary",
       "language": "typescript",
       "size": 9553
+    },
+    {
+      "path": "src/components/ProjectOrderManager.tsx",
+      "reason": "new",
+      "language": "typescript",
+      "size": 11332
     },
     {
       "path": "src/components/ProjectStoryAndRole.tsx",

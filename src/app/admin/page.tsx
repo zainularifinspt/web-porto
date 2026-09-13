@@ -23,12 +23,23 @@ import {
 } from "lucide-react";
 import { Project } from "@/types/project";
 import { MOCK_PROJECTS } from "@/data/mockProjects";
+import ToastNotification, { ToastType } from "@/components/ToastNotification";
 
 export default function AdminProjectsPage() {
   const [projects, setProjects] = useState<Project[]>(MOCK_PROJECTS);
   const [searchQuery, setSearchQuery] = useState("");
   const [filterFeatured, setFilterFeatured] = useState<"all" | "featured" | "regular">("all");
-  const [notification, setNotification] = useState<string | null>(null);
+  const [toast, setToast] = useState<{
+    isOpen: boolean;
+    type: ToastType;
+    title: string;
+    message: string;
+  }>({
+    isOpen: false,
+    type: "info",
+    title: "",
+    message: "",
+  });
 
   // Filtered projects
   const filteredProjects = projects.filter((project) => {
@@ -50,15 +61,15 @@ export default function AdminProjectsPage() {
   const totalStars = projects.reduce((acc, p) => acc + (p.stats?.stars || 0), 0);
   const uniqueTechCount = new Set(projects.flatMap((p) => p.technologies)).size;
 
-  const showNotification = (msg: string) => {
-    setNotification(msg);
-    setTimeout(() => setNotification(null), 3000);
-  };
-
   const handleDeleteMock = (id: string, title: string) => {
     if (confirm(`Apakah Anda yakin ingin menghapus project "${title}"?`)) {
       setProjects((prev) => prev.filter((p) => p.id !== id));
-      showNotification(`Project "${title}" berhasil dihapus (simulasi mock)`);
+      setToast({
+        isOpen: true,
+        type: "success",
+        title: "Project Dihapus",
+        message: `Project "${title}" berhasil dihapus dari daftar portofolio (simulasi mock).`,
+      });
     }
   };
 
@@ -67,9 +78,14 @@ export default function AdminProjectsPage() {
       prev.map((p) => {
         if (p.id === id) {
           const nextState = !p.isFeatured;
-          showNotification(
-            `Status unggulan "${p.title}" diubah menjadi: ${nextState ? "Aktif" : "Non-Aktif"}`
-          );
+          setToast({
+            isOpen: true,
+            type: "info",
+            title: nextState ? "Ditandai Unggulan" : "Unggulan Dinonaktifkan",
+            message: `Status unggulan untuk "${p.title}" telah diubah ke: ${
+              nextState ? "Aktif (Tampil di Beranda)" : "Reguler"
+            }`,
+          });
           return { ...p, isFeatured: nextState };
         }
         return p;
@@ -79,6 +95,14 @@ export default function AdminProjectsPage() {
 
   return (
     <div className="space-y-6">
+      {/* Toast Notification */}
+      <ToastNotification
+        isOpen={toast.isOpen}
+        type={toast.type}
+        title={toast.title}
+        message={toast.message}
+        onClose={() => setToast((prev) => ({ ...prev, isOpen: false }))}
+      />
       {/* Top Action Header */}
       <div className="rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/60 p-6 sm:p-8 backdrop-blur-md shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="space-y-1">
@@ -112,22 +136,6 @@ export default function AdminProjectsPage() {
           </Link>
         </div>
       </div>
-
-      {/* Notification Toast */}
-      {notification && (
-        <div className="p-4 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-800 text-xs font-mono text-emerald-700 dark:text-emerald-300 flex items-center justify-between gap-3 shadow-sm animate-in fade-in">
-          <div className="flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
-            <span>{notification}</span>
-          </div>
-          <button
-            onClick={() => setNotification(null)}
-            className="text-xs text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200"
-          >
-            ✕
-          </button>
-        </div>
-      )}
 
       {/* Metrics Summary Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
