@@ -403,7 +403,7 @@ export default function HeroTerminal() {
                 key={item.cmd}
                 type="button"
                 onClick={() => handleCommandExecution(item.cmd)}
-                className="shrink-0 px-2 py-0.5 rounded bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 hover:border-zinc-700 text-zinc-300 hover:text-emerald-300 transition-colors"
+                className="shrink-0 px-3 py-1.5 rounded bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 hover:border-zinc-700 text-zinc-300 hover:text-emerald-300 transition-colors active:scale-95"
               >
                 ${item.cmd}
               </button>
@@ -411,7 +411,7 @@ export default function HeroTerminal() {
             <button
               type="button"
               onClick={() => handleCommandExecution("clear")}
-              className="shrink-0 px-2 py-0.5 rounded bg-zinc-900 hover:bg-rose-950/40 border border-zinc-800 hover:border-rose-900/60 text-zinc-400 hover:text-rose-300 transition-colors flex items-center gap-1"
+              className="shrink-0 px-3 py-1.5 rounded bg-zinc-900 hover:bg-rose-950/40 border border-zinc-800 hover:border-rose-900/60 text-zinc-400 hover:text-rose-300 transition-colors flex items-center gap-1 active:scale-95"
             >
               <RotateCcw className="w-3 h-3" />
               clear
@@ -483,7 +483,7 @@ export default function HeroTerminal() {
                   <button
                     type="submit"
                     title="Jalankan perintah"
-                    className="px-2 py-0.5 rounded bg-zinc-900 hover:bg-emerald-600 hover:text-zinc-950 text-zinc-400 text-xs font-mono transition-colors flex items-center gap-1 border border-zinc-800"
+                    className="px-3 py-2 rounded-lg bg-zinc-900 hover:bg-emerald-600 hover:text-zinc-950 text-zinc-400 text-xs font-mono transition-colors flex items-center gap-1 border border-zinc-800 min-w-[52px] min-h-[36px] active:scale-95"
                   >
                     <span>Run</span>
                     <CornerDownLeft className="w-3 h-3" />
@@ -497,10 +497,10 @@ export default function HeroTerminal() {
 
           {/* Terminal Footer Quick Actions */}
           <div className="px-4 sm:px-6 py-3 border-t border-zinc-800/80 bg-zinc-900/60 flex flex-wrap items-center justify-between gap-3">
-            <div className="flex flex-wrap items-center gap-2.5">
+            <div className="flex flex-wrap sm:flex-nowrap items-center gap-2.5 w-full sm:w-auto">
               <a
                 href="#projects"
-                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-bold text-xs font-mono transition-all shadow-md shadow-emerald-500/20"
+                className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-bold text-xs font-mono transition-all shadow-md shadow-emerald-500/20 active:scale-95"
               >
                 <FolderGit2 className="w-3.5 h-3.5" />
                 <span>Lihat Karya Project</span>
@@ -508,7 +508,7 @@ export default function HeroTerminal() {
               </a>
               <a
                 href="#contact"
-                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-200 hover:text-white border border-zinc-700/80 text-xs font-mono transition-colors"
+                className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-200 hover:text-white border border-zinc-700/80 text-xs font-mono transition-colors active:scale-95"
               >
                 <Sparkles className="w-3 h-3 text-amber-400" />
                 <span>Hubungi Saya</span>

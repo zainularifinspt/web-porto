@@ -208,3 +208,41 @@ code, pre, kbd, samp, .font-mono, .font-code {
 .animate-scanline {
   animation: scanline 8s linear infinite;
 }
+
+/* Hide Scrollbar but keep scroll functionality (cross-browser) */
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+/* Remove tap highlight on mobile for interactive elements */
+button, a, [role="button"] {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Fade-in animation for terminal output */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Prevent overflow on mobile */
+@media (max-width: 640px) {
+  .no-overflow-mobile {
+    overflow-x: hidden;
+  }
+}

@@ -34,10 +34,10 @@ export default function QuickPreviewModal({
   if (!isOpen || !project) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-zinc-950/80 backdrop-blur-md animate-in fade-in duration-200">
+    <div onClick={onClose} className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-6 bg-zinc-950/80 backdrop-blur-md animate-in fade-in duration-200">
       {/* Modal Dialog Container */}
       <div
-        className="relative w-full max-w-3xl rounded-2xl border border-zinc-700 bg-zinc-900 shadow-2xl overflow-hidden ring-1 ring-emerald-500/20"
+        className="relative w-full sm:max-w-3xl rounded-t-2xl sm:rounded-2xl border border-zinc-700 bg-zinc-900 shadow-2xl overflow-hidden ring-1 ring-emerald-500/20 animate-in slide-in-from-bottom-4 sm:slide-in-from-bottom-0 sm:zoom-in-95 duration-200"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Terminal Header */}
@@ -54,14 +54,14 @@ export default function QuickPreviewModal({
           <button
             onClick={onClose}
             aria-label="Tutup pratinjau"
-            className="p-1 rounded-md text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800 transition-colors"
+            className="p-2 rounded-lg text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Modal Body with Scroll */}
-        <div className="max-h-[80vh] overflow-y-auto p-6 space-y-6">
+        <div className="max-h-[75vh] sm:max-h-[80vh] overflow-y-auto p-4 sm:p-6 space-y-5">
           {/* Thumbnail preview */}
           <div className="relative aspect-video w-full rounded-xl overflow-hidden border border-zinc-800 bg-zinc-950 shadow-inner">
             <Image
@@ -125,22 +125,23 @@ export default function QuickPreviewModal({
           </div>
 
           {/* Actions */}
-          <div className="pt-4 border-t border-zinc-800 flex flex-wrap items-center justify-between gap-3">
+          <div className="pt-4 border-t border-zinc-800 space-y-3">
+            {/* Primary CTA: Detail Page */}
             <Link
               href={`/project/${project.slug}`}
               onClick={onClose}
-              className="inline-flex items-center gap-1.5 text-xs font-mono text-emerald-400 hover:text-emerald-300 font-semibold"
+              className="flex items-center justify-center gap-1.5 w-full py-2.5 px-4 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-mono font-bold text-xs transition-colors shadow-md shadow-emerald-500/20"
             >
-              Halaman Detail Lengkap <ArrowRight className="w-3.5 h-3.5" />
+              Buka Halaman Detail Lengkap <ArrowRight className="w-3.5 h-3.5" />
             </Link>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 w-full">
               {project.demoUrl && (
                 <a
                   href={project.demoUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-mono font-bold text-xs transition-colors shadow-md shadow-emerald-500/20"
+                  className="flex-1 inline-flex items-center justify-center gap-1.5 py-2.5 px-4 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-200 font-mono text-xs border border-zinc-700 transition-colors"
                 >
                   <ExternalLink className="w-3.5 h-3.5" />
                   Live Demo
@@ -151,7 +152,7 @@ export default function QuickPreviewModal({
                   href={project.repoUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-200 font-mono text-xs border border-zinc-700 transition-colors"
+                  className="flex-1 inline-flex items-center justify-center gap-1.5 py-2.5 px-4 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-200 font-mono text-xs border border-zinc-700 transition-colors"
                 >
                   <Code2 className="w-3.5 h-3.5" />
                   Source Code
