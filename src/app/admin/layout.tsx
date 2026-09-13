@@ -43,10 +43,17 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     }
   }, [isLoginPage]);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/auth/logout", { method: "POST" });
+    } catch {
+      // Ignore network errors on logout
+    }
+
     if (typeof window !== "undefined") {
       localStorage.removeItem("portfolio_admin_auth");
       localStorage.removeItem("portfolio_admin_user");
+      localStorage.removeItem("portfolio_admin_token");
       router.push("/admin/login");
     }
   };

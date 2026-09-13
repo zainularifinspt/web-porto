@@ -1,6 +1,6 @@
 {
   "repo": "Web Portofolio",
-  "generatedForCommit": "81ce39993d0abf7f350c226f4eee521534fd4ecb",
+  "generatedForCommit": "e1a4d1570c8b979ffc59566bf408da8b9417ab06",
   "files": [
     {
       "path": ".claude/skills/ngodingpakeai/SKILL.md",
@@ -88,9 +88,9 @@
     },
     {
       "path": "src/app/admin/login/page.tsx",
-      "reason": "needs_summary",
+      "reason": "changed",
       "language": "typescript",
-      "size": 14375
+      "size": 14732
     },
     {
       "path": "src/app/admin/page.tsx",
@@ -121,6 +121,24 @@
       "reason": "needs_summary",
       "language": "typescript",
       "size": 4272
+    },
+    {
+      "path": "src/app/api/auth/login/route.ts",
+      "reason": "new",
+      "language": "typescript",
+      "size": 2875
+    },
+    {
+      "path": "src/app/api/auth/logout/route.ts",
+      "reason": "new",
+      "language": "typescript",
+      "size": 923
+    },
+    {
+      "path": "src/app/api/auth/session/route.ts",
+      "reason": "new",
+      "language": "typescript",
+      "size": 1831
     },
     {
       "path": "src/app/api/contact/messages/[id]/route.ts",
@@ -358,7 +376,7 @@
     },
     {
       "path": "src/db/auth.ts",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 4141
     },
@@ -370,7 +388,7 @@
     },
     {
       "path": "src/db/index.ts",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 161
     },
@@ -418,7 +436,7 @@
     },
     {
       "path": "src/db/migrations/007_create_admin_users_schema.sql",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "sql",
       "size": 1672
     },
@@ -430,7 +448,7 @@
     },
     {
       "path": "src/db/schema.ts",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 4566
     },
