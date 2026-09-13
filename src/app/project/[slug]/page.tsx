@@ -226,6 +226,14 @@ export default async function ProjectDetailPage({ params }: PageProps) {
             <div />
           )}
 
+          <Link
+            href="/#projects"
+            className="hidden sm:inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-zinc-100 dark:bg-zinc-900 hover:bg-zinc-200 dark:hover:bg-zinc-800 border border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors text-xs font-mono font-semibold"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            cd .. / Galeri
+          </Link>
+
           {nextProject ? (
             <Link
               href={`/project/${nextProject.slug}`}

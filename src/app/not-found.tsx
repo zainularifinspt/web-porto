@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { Terminal, ArrowLeft, Home } from "lucide-react";
 import Navbar from "@/components/Navbar";
+import BackButton from "@/components/BackButton";
 
 export default function NotFound() {
   return (
@@ -36,9 +37,23 @@ export default function NotFound() {
             </p>
 
             <div className="pt-6 flex flex-wrap items-center justify-center gap-3">
+              <BackButton
+                fallbackHref="/#projects"
+                label="Kembali ke Sebelumnya"
+                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-200 text-xs font-mono font-bold border border-zinc-200 dark:border-zinc-700 transition-colors"
+              />
+
+              <Link
+                href="/#projects"
+                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 text-xs font-mono font-bold border border-zinc-200 dark:border-zinc-700 transition-colors"
+              >
+                <ArrowLeft className="w-3.5 h-3.5" />
+                Galeri Project
+              </Link>
+
               <Link
                 href="/"
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 dark:bg-emerald-500 dark:hover:bg-emerald-400 text-white dark:text-zinc-950 text-xs font-mono font-bold transition-all shadow-md"
+                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 dark:bg-emerald-500 dark:hover:bg-emerald-400 text-white dark:text-zinc-950 text-xs font-mono font-bold transition-all shadow-md"
               >
                 <Home className="w-3.5 h-3.5" />
                 Kembali ke Beranda
