@@ -2,11 +2,12 @@
 
 import React, { createContext, useContext, useEffect, useState } from "react";
 
-type Theme = "light" | "dark" | "system";
+export type Theme = "light" | "dark" | "system";
 
-interface ThemeContextType {
+export interface ThemeContextType {
   theme: Theme;
   resolvedTheme: "light" | "dark";
+  mounted: boolean;
   setTheme: (theme: Theme) => void;
   toggleTheme: () => void;
 }
@@ -24,6 +25,15 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     const initialTheme: Theme = savedTheme || "system";
     setThemeState(initialTheme);
     setMounted(true);
+
+    // Multi-tab storage sync
+    const handleStorage = (e: StorageEvent) => {
+      if (e.key === "portfolio-theme" && e.newValue) {
+        setThemeState(e.newValue as Theme);
+      }
+    };
+    window.addEventListener("storage", handleStorage);
+    return () => window.removeEventListener("storage", handleStorage);
   }, []);
 
   useEffect(() => {
@@ -63,7 +73,11 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   const setTheme = (newTheme: Theme) => {
     setThemeState(newTheme);
-    localStorage.setItem("portfolio-theme", newTheme);
+    try {
+      localStorage.setItem("portfolio-theme", newTheme);
+    } catch (e) {
+      console.warn("Unable to save theme to localStorage", e);
+    }
   };
 
   const toggleTheme = () => {
@@ -72,7 +86,9 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <ThemeContext.Provider value={{ theme, resolvedTheme, setTheme, toggleTheme }}>
+    <ThemeContext.Provider
+      value={{ theme, resolvedTheme, mounted, setTheme, toggleTheme }}
+    >
       {children}
     </ThemeContext.Provider>
   );
