@@ -2,7 +2,20 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ExternalLink, Code2, Star, Calendar, UserCheck, Layers, Terminal } from "lucide-react";
+import { Metadata } from "next";
+import {
+  ArrowLeft,
+  ArrowRight,
+  ExternalLink,
+  Code2,
+  Star,
+  Calendar,
+  UserCheck,
+  Layers,
+  Terminal,
+  Sparkles,
+  Share2
+} from "lucide-react";
 import { MOCK_PROJECTS } from "@/data/mockProjects";
 import Navbar from "@/components/Navbar";
 
@@ -12,21 +25,50 @@ interface PageProps {
   }>;
 }
 
-export default async function ProjectDetailPage({ params }: PageProps) {
+// Generate static routes for all projects
+export async function generateStaticParams() {
+  return MOCK_PROJECTS.map((project) => ({
+    slug: project.slug,
+  }));
+}
+
+// Dynamic metadata for SEO
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const project = MOCK_PROJECTS.find((p) => p.slug === slug);
 
   if (!project) {
+    return {
+      title: "Project Tidak Ditemukan | Portofolio Dev Kece",
+    };
+  }
+
+  return {
+    title: `${project.title} — Detail Project | Portofolio Dev Kece`,
+    description: project.summary,
+  };
+}
+
+export default async function ProjectDetailPage({ params }: PageProps) {
+  const { slug } = await params;
+  const projectIndex = MOCK_PROJECTS.findIndex((p) => p.slug === slug);
+
+  if (projectIndex === -1) {
     notFound();
   }
+
+  const project = MOCK_PROJECTS[projectIndex];
+  const prevProject = projectIndex > 0 ? MOCK_PROJECTS[projectIndex - 1] : null;
+  const nextProject =
+    projectIndex < MOCK_PROJECTS.length - 1 ? MOCK_PROJECTS[projectIndex + 1] : null;
 
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col selection:bg-emerald-500 selection:text-zinc-950">
       <Navbar />
 
       <main className="flex-1 max-w-5xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-10">
-        {/* Back Link */}
-        <div className="mb-8">
+        {/* Breadcrumb Navigation */}
+        <div className="mb-8 flex items-center justify-between">
           <Link
             href="/"
             className="inline-flex items-center gap-2 text-xs font-mono text-zinc-400 hover:text-emerald-400 transition-colors p-2 rounded-lg hover:bg-zinc-900 border border-transparent hover:border-zinc-800"
@@ -34,6 +76,10 @@ export default async function ProjectDetailPage({ params }: PageProps) {
             <ArrowLeft className="w-4 h-4" />
             cd .. / Kembali ke Galeri Project
           </Link>
+
+          <span className="text-xs font-mono text-zinc-400 hidden sm:inline-block">
+            ~/portfolio/projects/{project.slug}
+          </span>
         </div>
 
         {/* Project Header Card */}
@@ -82,7 +128,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                 <Layers className="w-3.5 h-3.5 text-emerald-400" /> Teknologi Utama
               </span>
               <span className="font-semibold text-zinc-200">
-                {project.technologies.slice(0, 2).join(", ")}
+                {project.technologies.slice(0, 3).join(", ")}
               </span>
             </div>
           </div>
@@ -142,7 +188,8 @@ export default async function ProjectDetailPage({ params }: PageProps) {
             {/* Additional Project Gallery Images */}
             {project.images && project.images.length > 0 && (
               <div className="space-y-4">
-                <h3 className="text-lg font-bold font-mono text-zinc-200">
+                <h3 className="text-lg font-bold font-mono text-zinc-200 flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-emerald-400" />
                   Tangkapan Layar & Pratinjau
                 </h3>
                 <div className="grid grid-cols-1 gap-4">
@@ -206,6 +253,39 @@ export default async function ProjectDetailPage({ params }: PageProps) {
               </Link>
             </div>
           </div>
+        </div>
+
+        {/* Project Navigation Footer (Prev / Next) */}
+        <div className="pt-8 border-t border-zinc-800/80 flex items-center justify-between gap-4 font-mono text-xs">
+          {prevProject ? (
+            <Link
+              href={`/project/${prevProject.slug}`}
+              className="flex items-center gap-2 p-3 rounded-lg hover:bg-zinc-900 border border-transparent hover:border-zinc-800 text-zinc-400 hover:text-emerald-400 transition-colors"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span>
+                <span className="block text-[10px] text-zinc-400">Sebelumnya</span>
+                <span className="font-semibold text-zinc-200">{prevProject.title}</span>
+              </span>
+            </Link>
+          ) : (
+            <div />
+          )}
+
+          {nextProject ? (
+            <Link
+              href={`/project/${nextProject.slug}`}
+              className="flex items-center gap-2 p-3 rounded-lg hover:bg-zinc-900 border border-transparent hover:border-zinc-800 text-zinc-400 hover:text-emerald-400 transition-colors text-right"
+            >
+              <span>
+                <span className="block text-[10px] text-zinc-400">Selanjutnya</span>
+                <span className="font-semibold text-zinc-200">{nextProject.title}</span>
+              </span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          ) : (
+            <div />
+          )}
         </div>
       </main>
     </div>
