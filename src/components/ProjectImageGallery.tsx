@@ -13,6 +13,7 @@ import {
   X
 } from "lucide-react";
 import { ProjectImage } from "@/types/project";
+import ImageLightbox from "./ImageLightbox";
 
 interface ProjectImageGalleryProps {
   images: ProjectImage[];
@@ -219,39 +220,15 @@ export default function ProjectImageGallery({
         </div>
       )}
 
-      {/* Zoom Modal Lightbox */}
-      {isZoomed && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-zinc-950/90 backdrop-blur-md animate-in fade-in"
-          onClick={() => setIsZoomed(false)}
-        >
-          <div
-            className="relative max-w-5xl w-full max-h-[90vh] aspect-video rounded-2xl overflow-hidden border border-zinc-700 shadow-2xl bg-zinc-950"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <Image
-              src={currentImage.imageUrl}
-              alt={currentImage.caption || projectTitle}
-              fill
-              sizes="100vw"
-              className="object-contain"
-            />
-            {currentImage.caption && (
-              <div className="absolute bottom-0 inset-x-0 p-4 bg-zinc-950/90 border-t border-zinc-800 font-mono text-xs text-zinc-200 text-center">
-                <span className="text-emerald-400 mr-2">//</span>
-                {currentImage.caption}
-              </div>
-            )}
-            <button
-              onClick={() => setIsZoomed(false)}
-              className="absolute top-4 right-4 p-2 rounded-lg bg-zinc-900/90 border border-zinc-700 text-zinc-200 hover:text-white text-xs font-mono hover:bg-zinc-800 shadow-xl flex items-center gap-1.5"
-            >
-              <X className="w-4 h-4" />
-              <span>Tutup [ESC]</span>
-            </button>
-          </div>
-        </div>
-      )}
+      {/* Fullscreen Swipeable Lightbox */}
+      <ImageLightbox
+        images={images}
+        selectedIndex={selectedIndex}
+        isOpen={isZoomed}
+        onClose={() => setIsZoomed(false)}
+        onSelectIndex={setSelectedIndex}
+        projectTitle={projectTitle}
+      />
     </div>
   );
 }
