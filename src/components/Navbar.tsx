@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Terminal, Code, User, Send, Menu, X, ShieldAlert } from "lucide-react";
+import { Terminal, Code, User, Send, Menu, X } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
 
 export default function Navbar() {
@@ -69,15 +69,6 @@ export default function Navbar() {
           <div className="hidden md:flex items-center space-x-3">
             {/* Theme Toggle Button */}
             <ThemeToggle />
-
-            {/* Admin Login Button */}
-            <Link
-              href="/admin/login"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-medium text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-700/50 hover:bg-emerald-100 dark:hover:bg-emerald-900/40 hover:border-emerald-500 transition-all shadow-sm"
-            >
-              <ShieldAlert className="w-3.5 h-3.5" />
-              Masuk Pemilik
-            </Link>
           </div>
 
           {/* Mobile menu button */}
@@ -133,16 +124,6 @@ export default function Navbar() {
             <Send className="w-4 h-4 text-emerald-500" />
             <span>./kontak-sosial</span>
           </Link>
-          <div className="pt-2 border-t border-zinc-100 dark:border-zinc-800">
-            <Link
-              href="/admin/login"
-              onClick={() => setIsOpen(false)}
-              className="flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-xl text-emerald-700 dark:text-emerald-400 border border-emerald-300 dark:border-emerald-800/80 bg-emerald-50 dark:bg-emerald-950/40 text-center font-bold"
-            >
-              <ShieldAlert className="w-4 h-4" />
-              <span>Masuk Sebagai Pemilik</span>
-            </Link>
-          </div>
         </div>
       )}
     </nav>

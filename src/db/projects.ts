@@ -4,7 +4,7 @@ import { ProjectInsert } from "./schema";
 import { dbQuery, dbQueryOne } from "./client";
 
 // In-memory persistent state for local development & runtime fallback
-let memoryProjects: Project[] = [...MOCK_PROJECTS];
+let memoryProjects: Project[] = [];
 
 function mapProjectRow(row: any): Project {
   return {

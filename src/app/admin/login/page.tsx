@@ -15,7 +15,6 @@ import {
   AlertCircle,
   CheckCircle2,
   Loader2,
-  Sparkles,
   Fingerprint,
 } from "lucide-react";
 
@@ -31,16 +30,6 @@ export default function AdminLoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [authStep, setAuthStep] = useState<string>("");
   const [isSuccess, setIsSuccess] = useState(false);
-
-  // Mock demo credentials for owner
-  const DEMO_EMAIL = "admin@developer.dev";
-  const DEMO_PASSWORD = "developer123";
-
-  const handleFillDemo = () => {
-    setEmail(DEMO_EMAIL);
-    setPassword(DEMO_PASSWORD);
-    setError(null);
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -262,15 +251,6 @@ export default function AdminLoginPage() {
                     Ingat sesi ini
                   </span>
                 </label>
-
-                <button
-                  type="button"
-                  onClick={handleFillDemo}
-                  className="text-xs font-mono text-emerald-600 dark:text-emerald-400 hover:underline inline-flex items-center gap-1"
-                >
-                  <Sparkles className="w-3 h-3" />
-                  <span>Isi Demo</span>
-                </button>
               </div>
 
               {/* Submit Button */}
@@ -299,28 +279,6 @@ export default function AdminLoginPage() {
                 </button>
               </div>
             </form>
-
-            {/* Demo Credentials Box */}
-            <div className="mt-6 pt-4 border-t border-zinc-100 dark:border-zinc-800/80 space-y-2">
-              <div className="flex items-center justify-between text-[11px] font-mono text-zinc-400">
-                <span>KREDENSIAL DEMO:</span>
-                <span className="text-emerald-500 font-semibold">Siap Digunakan</span>
-              </div>
-              <div className="p-3 rounded-xl bg-zinc-50 dark:bg-zinc-950/70 border border-zinc-200 dark:border-zinc-800 font-mono text-xs space-y-1">
-                <div className="flex justify-between">
-                  <span className="text-zinc-500">Email:</span>
-                  <span className="text-zinc-800 dark:text-zinc-200 select-all font-semibold">
-                    {DEMO_EMAIL}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-zinc-500">Sandi:</span>
-                  <span className="text-zinc-800 dark:text-zinc-200 select-all font-semibold">
-                    {DEMO_PASSWORD}
-                  </span>
-                </div>
-              </div>
-            </div>
           </div>
 
           {/* Terminal footer note */}

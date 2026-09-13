@@ -58,7 +58,7 @@ const MOCK_MESSAGES: ContactMessageRow[] = [
 ];
 
 // In-memory runtime cache for development
-let memoryMessages: ContactMessageRow[] = [...MOCK_MESSAGES];
+let memoryMessages: ContactMessageRow[] = [];
 
 function mapMessageRow(row: any): ContactMessageRow {
   return {
