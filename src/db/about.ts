@@ -1,6 +1,6 @@
 import { AboutProfile, SkillCategory, ExperienceItem, EducationItem } from "@/types/about";
 import { MOCK_ABOUT } from "@/data/mockAbout";
-import { AboutProfileUpdate } from "./schema";
+import { dbQuery, dbQueryOne } from "./client";
 
 /**
  * In-memory state holding the current about profile if database is not active.
@@ -14,8 +14,99 @@ let currentAboutState: AboutProfile = JSON.parse(JSON.stringify(MOCK_ABOUT));
 export async function getAboutContent(): Promise<AboutProfile> {
   if (process.env.DATABASE_URL) {
     try {
-      // Future: connect via InsForge / PostgreSQL client
-      // e.g. query about_profiles join skills, experiences, education
+      const profileRow = await dbQueryOne(`SELECT * FROM about_profiles LIMIT 1`);
+      if (profileRow) {
+        // Fetch categories and skills
+        const catRows = await dbQuery(`
+          SELECT 
+            c.id, c.name, c.icon_name,
+            COALESCE((
+              SELECT json_agg(json_build_object(
+                'name', s.name,
+                'level', s.level,
+                'yearsOfExp', s.years_of_exp,
+                'description', s.description,
+                'isKey', s.is_key
+              ) ORDER BY s.sort_order ASC)
+              FROM skills s WHERE s.category_id = c.id
+            ), '[]'::json) as skills
+          FROM skill_categories c
+          ORDER BY c.sort_order ASC
+        `);
+
+        // Fetch experiences
+        const expRows = await dbQuery(`
+          SELECT id, role, company, location, period, is_current, summary, contributions, technologies
+          FROM experiences
+          ORDER BY sort_order ASC
+        `);
+
+        // Fetch education
+        const eduRows = await dbQuery(`
+          SELECT id, degree, institution, year, focus
+          FROM education
+          ORDER BY sort_order ASC
+        `);
+
+        const formattedSkills: SkillCategory[] = catRows.map((c) => ({
+          id: c.id,
+          name: c.name,
+          iconName: c.icon_name,
+          skills: Array.isArray(c.skills) ? c.skills : [],
+        }));
+
+        const formattedExperiences: ExperienceItem[] = expRows.map((e) => ({
+          id: e.id,
+          role: e.role,
+          company: e.company,
+          location: e.location || undefined,
+          period: e.period,
+          isCurrent: Boolean(e.is_current),
+          summary: e.summary,
+          contributions: Array.isArray(e.contributions) ? e.contributions : typeof e.contributions === "string" ? JSON.parse(e.contributions) : [],
+          technologies: Array.isArray(e.technologies) ? e.technologies : typeof e.technologies === "string" ? JSON.parse(e.technologies) : [],
+        }));
+
+        const formattedEducation: EducationItem[] = eduRows.map((ed) => ({
+          id: ed.id,
+          degree: ed.degree,
+          institution: ed.institution,
+          year: ed.year,
+          focus: ed.focus,
+        }));
+
+        const bio = Array.isArray(profileRow.bio)
+          ? profileRow.bio
+          : typeof profileRow.bio === "string"
+          ? JSON.parse(profileRow.bio)
+          : currentAboutState.bio;
+
+        const stats = typeof profileRow.stats === "object"
+          ? profileRow.stats
+          : typeof profileRow.stats === "string"
+          ? JSON.parse(profileRow.stats)
+          : currentAboutState.stats;
+
+        const loadedProfile: AboutProfile = {
+          name: profileRow.name,
+          headline: profileRow.headline,
+          bio,
+          photoUrl: profileRow.photo_url,
+          avatarFallback: profileRow.avatar_fallback,
+          status: profileRow.status,
+          location: profileRow.location,
+          email: profileRow.email,
+          githubUrl: profileRow.github_url,
+          linkedinUrl: profileRow.linkedin_url,
+          stats,
+          skills: formattedSkills.length > 0 ? formattedSkills : currentAboutState.skills,
+          experiences: formattedExperiences.length > 0 ? formattedExperiences : currentAboutState.experiences,
+          education: formattedEducation.length > 0 ? formattedEducation : currentAboutState.education,
+        };
+
+        currentAboutState = loadedProfile;
+        return loadedProfile;
+      }
     } catch (err) {
       console.warn("Database query failed for about content, falling back to cached/mock data:", err);
     }
@@ -32,7 +123,39 @@ export async function updateAboutContent(
 ): Promise<AboutProfile> {
   if (process.env.DATABASE_URL) {
     try {
-      // Future: execute update query on about_profiles table
+      const existing = await dbQueryOne(`SELECT id FROM about_profiles LIMIT 1`);
+      if (existing) {
+        await dbQuery(
+          `UPDATE about_profiles SET
+            name = COALESCE($1, name),
+            headline = COALESCE($2, headline),
+            bio = COALESCE($3, bio),
+            photo_url = COALESCE($4, photo_url),
+            avatar_fallback = COALESCE($5, avatar_fallback),
+            status = COALESCE($6, status),
+            location = COALESCE($7, location),
+            email = COALESCE($8, email),
+            github_url = COALESCE($9, github_url),
+            linkedin_url = COALESCE($10, linkedin_url),
+            stats = COALESCE($11, stats),
+            updated_at = NOW()
+          WHERE id = $12`,
+          [
+            updates.name ?? null,
+            updates.headline ?? null,
+            updates.bio ? JSON.stringify(updates.bio) : null,
+            updates.photoUrl ?? updates.photo_url ?? null,
+            updates.avatarFallback ?? updates.avatar_fallback ?? null,
+            updates.status ?? null,
+            updates.location ?? null,
+            updates.email ?? null,
+            updates.githubUrl ?? updates.github_url ?? null,
+            updates.linkedinUrl ?? updates.linkedin_url ?? null,
+            updates.stats ? JSON.stringify(updates.stats) : null,
+            existing.id,
+          ]
+        );
+      }
     } catch (err) {
       console.warn("Database update failed for about content, updating in-memory:", err);
     }
@@ -64,7 +187,7 @@ export async function updateAboutContent(
 }
 
 /**
- * Helper to reset about content to initial mock state (useful for testing or resets).
+ * Helper to reset about content to initial mock state.
  */
 export function resetAboutContent(): void {
   currentAboutState = JSON.parse(JSON.stringify(MOCK_ABOUT));

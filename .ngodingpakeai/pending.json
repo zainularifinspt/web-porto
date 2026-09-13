@@ -1,6 +1,6 @@
 {
   "repo": "Web Portofolio",
-  "generatedForCommit": "3d486e0df9a1be4e96c7db262993d472b064b1e1",
+  "generatedForCommit": "fa3944fa873b5c6848ae3c7cfb1eb30fededaf3f",
   "files": [
     {
       "path": ".claude/skills/ngodingpakeai/SKILL.md",
@@ -94,7 +94,7 @@
     },
     {
       "path": "src/app/admin/page.tsx",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 16210
     },
@@ -166,13 +166,25 @@
     },
     {
       "path": "src/app/api/projects/[slug]/route.ts",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 4249
     },
     {
+      "path": "src/app/api/projects/featured/route.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 1648
+    },
+    {
+      "path": "src/app/api/projects/reorder/route.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 3017
+    },
+    {
       "path": "src/app/api/projects/route.ts",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 5213
     },
@@ -184,9 +196,9 @@
     },
     {
       "path": "src/app/globals.css",
-      "reason": "needs_summary",
+      "reason": "changed",
       "language": "css",
-      "size": 2594
+      "size": 5848
     },
     {
       "path": "src/app/layout.tsx",
@@ -204,7 +216,7 @@
       "path": "src/app/page.tsx",
       "reason": "needs_summary",
       "language": "typescript",
-      "size": 4199
+      "size": 16720
     },
     {
       "path": "src/app/project/[slug]/not-found.tsx",
@@ -244,9 +256,9 @@
     },
     {
       "path": "src/components/HeroTerminal.tsx",
-      "reason": "needs_summary",
+      "reason": "changed",
       "language": "typescript",
-      "size": 5119
+      "size": 22781
     },
     {
       "path": "src/components/ImageLightbox.tsx",
@@ -258,7 +270,7 @@
       "path": "src/components/Navbar.tsx",
       "reason": "needs_summary",
       "language": "typescript",
-      "size": 6693
+      "size": 7393
     },
     {
       "path": "src/components/ProfileCard.tsx",
@@ -280,7 +292,7 @@
     },
     {
       "path": "src/components/ProjectForm.tsx",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 38465
     },
@@ -300,7 +312,7 @@
       "path": "src/components/ProjectOrderManager.tsx",
       "reason": "needs_summary",
       "language": "typescript",
-      "size": 11165
+      "size": 11967
     },
     {
       "path": "src/components/ProjectStoryAndRole.tsx",
@@ -316,9 +328,27 @@
     },
     {
       "path": "src/components/QuickPreviewModal.tsx",
+      "reason": "changed",
+      "language": "typescript",
+      "size": 6967
+    },
+    {
+      "path": "src/components/ScrollReveal.tsx",
       "reason": "needs_summary",
       "language": "typescript",
-      "size": 6613
+      "size": 3097
+    },
+    {
+      "path": "src/components/ScrollToTopButton.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 2543
+    },
+    {
+      "path": "src/components/SectionDivider.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 1475
     },
     {
       "path": "src/components/SkillsSection.tsx",

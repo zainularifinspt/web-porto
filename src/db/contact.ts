@@ -4,6 +4,7 @@ import {
   ContactMessageUpdate,
   ContactMessageStatus,
 } from "./schema";
+import { dbQuery, dbQueryOne } from "./client";
 
 /**
  * Initial sample mock messages for local preview & testing
@@ -59,6 +60,23 @@ const MOCK_MESSAGES: ContactMessageRow[] = [
 // In-memory runtime cache for development
 let memoryMessages: ContactMessageRow[] = [...MOCK_MESSAGES];
 
+function mapMessageRow(row: any): ContactMessageRow {
+  return {
+    id: row.id,
+    name: row.name,
+    email: row.email,
+    subject: row.subject,
+    category: row.category,
+    message: row.message,
+    status: row.status,
+    ip_address: row.ip_address || null,
+    user_agent: row.user_agent || null,
+    notes: row.notes || null,
+    created_at: row.created_at ? new Date(row.created_at).toISOString() : new Date().toISOString(),
+    updated_at: row.updated_at ? new Date(row.updated_at).toISOString() : new Date().toISOString(),
+  };
+}
+
 /**
  * Fetch all contact messages with optional filtering & search
  */
@@ -69,8 +87,31 @@ export async function getContactMessages(filters?: {
 }): Promise<ContactMessageRow[]> {
   if (process.env.DATABASE_URL) {
     try {
-      // Future: Query from PostgreSQL pool
-      // SELECT * FROM contact_messages ORDER BY created_at DESC
+      const rows = await dbQuery(`SELECT * FROM contact_messages ORDER BY created_at DESC`);
+      if (rows) {
+        let result = rows.map(mapMessageRow);
+
+        if (filters?.status && filters.status !== "all") {
+          result = result.filter((m) => m.status === filters.status);
+        }
+
+        if (filters?.category && filters.category !== "all") {
+          result = result.filter((m) => m.category === filters.category);
+        }
+
+        if (filters?.searchQuery && filters.searchQuery.trim()) {
+          const q = filters.searchQuery.toLowerCase().trim();
+          result = result.filter(
+            (m) =>
+              m.name.toLowerCase().includes(q) ||
+              m.email.toLowerCase().includes(q) ||
+              m.subject.toLowerCase().includes(q) ||
+              m.message.toLowerCase().includes(q)
+          );
+        }
+
+        return result;
+      }
     } catch (err) {
       console.warn("Database query failed, using in-memory messages:", err);
     }
@@ -97,48 +138,69 @@ export async function getContactMessages(filters?: {
     );
   }
 
-  // Sort latest first
   return result.sort(
     (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
   );
 }
 
 /**
- * Get aggregated statistics of contact messages for owner dashboard
- */
-export async function getContactMessageStats() {
-  const all = [...memoryMessages];
-  return {
-    total: all.length,
-    unread: all.filter((m) => m.status === "unread").length,
-    read: all.filter((m) => m.status === "read").length,
-    replied: all.filter((m) => m.status === "replied").length,
-    archived: all.filter((m) => m.status === "archived").length,
-    byCategory: {
-      project: all.filter((m) => m.category === "project").length,
-      consultation: all.filter((m) => m.category === "consultation").length,
-      hire: all.filter((m) => m.category === "hire").length,
-      general: all.filter((m) => m.category === "general").length,
-    },
-  };
-}
-
-/**
- * Fetch a single contact message by ID
+ * Fetch single message by ID
  */
 export async function getContactMessageById(
   id: string
 ): Promise<ContactMessageRow | null> {
+  if (process.env.DATABASE_URL) {
+    try {
+      const row = await dbQueryOne(
+        `SELECT * FROM contact_messages WHERE id::text = $1 LIMIT 1`,
+        [id]
+      );
+      if (row) return mapMessageRow(row);
+    } catch (err) {
+      console.warn("Database getContactMessageById failed, checking memory:", err);
+    }
+  }
+
   const messages = await getContactMessages();
   return messages.find((m) => m.id === id) || null;
 }
 
 /**
- * Insert a new contact message
+ * Save new contact message sent by site visitor
  */
 export async function createContactMessage(
   data: ContactMessageInsert
 ): Promise<ContactMessageRow> {
+  if (process.env.DATABASE_URL) {
+    try {
+      const row = await dbQueryOne(
+        `INSERT INTO contact_messages (
+          name, email, subject, category, message, status, ip_address, user_agent
+        ) VALUES (
+          $1, $2, $3, $4, $5, $6, $7, $8
+        ) RETURNING *`,
+        [
+          data.name.trim(),
+          data.email.trim(),
+          data.subject.trim(),
+          data.category || "general",
+          data.message.trim(),
+          "unread",
+          data.ip_address || null,
+          data.user_agent || null,
+        ]
+      );
+      if (row) {
+        const saved = mapMessageRow(row);
+        memoryMessages = [saved, ...memoryMessages];
+        return saved;
+      }
+    } catch (err) {
+      console.warn("Database createContactMessage failed, saving to memory:", err);
+    }
+  }
+
+  const now = new Date().toISOString();
   const newMessage: ContactMessageRow = {
     id: `msg-${Date.now()}`,
     name: data.name.trim(),
@@ -150,37 +212,51 @@ export async function createContactMessage(
     ip_address: data.ip_address || null,
     user_agent: data.user_agent || null,
     notes: null,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
+    created_at: now,
+    updated_at: now,
   };
-
-  if (process.env.DATABASE_URL) {
-    try {
-      // Future: INSERT INTO contact_messages (...) VALUES (...)
-    } catch (err) {
-      console.warn("Database insert failed, persisting to memory:", err);
-    }
-  }
 
   memoryMessages = [newMessage, ...memoryMessages];
   return newMessage;
 }
 
 /**
- * Update contact message status or administrative notes
+ * Update message status (e.g. read, replied, archived) or admin notes
  */
-export async function updateContactMessage(
+export async function updateContactMessageStatus(
   id: string,
-  update: ContactMessageUpdate
+  updates: ContactMessageUpdate
 ): Promise<ContactMessageRow | null> {
+  if (process.env.DATABASE_URL) {
+    try {
+      const row = await dbQueryOne(
+        `UPDATE contact_messages SET
+          status = COALESCE($1, status),
+          notes = COALESCE($2, notes),
+          updated_at = NOW()
+        WHERE id::text = $3
+        RETURNING *`,
+        [updates.status ?? null, updates.notes ?? null, id]
+      );
+      if (row) {
+        const updated = mapMessageRow(row);
+        const idx = memoryMessages.findIndex((m) => m.id === id);
+        if (idx !== -1) memoryMessages[idx] = updated;
+        return updated;
+      }
+    } catch (err) {
+      console.warn("Database updateContactMessageStatus failed:", err);
+    }
+  }
+
   const index = memoryMessages.findIndex((m) => m.id === id);
   if (index === -1) return null;
 
   const current = memoryMessages[index];
   const updated: ContactMessageRow = {
     ...current,
-    status: update.status ?? current.status,
-    notes: update.notes !== undefined ? update.notes : current.notes,
+    status: updates.status || current.status,
+    notes: updates.notes !== undefined ? updates.notes : current.notes,
     updated_at: new Date().toISOString(),
   };
 
@@ -188,11 +264,48 @@ export async function updateContactMessage(
   return updated;
 }
 
+export const updateContactMessage = updateContactMessageStatus;
+
 /**
  * Delete a contact message
  */
 export async function deleteContactMessage(id: string): Promise<boolean> {
+  if (process.env.DATABASE_URL) {
+    try {
+      const res = await dbQuery(
+        `DELETE FROM contact_messages WHERE id::text = $1 RETURNING id`,
+        [id]
+      );
+      if (res && res.length > 0) {
+        memoryMessages = memoryMessages.filter((m) => m.id !== id);
+        return true;
+      }
+    } catch (err) {
+      console.warn("Database deleteContactMessage failed:", err);
+    }
+  }
+
   const initialLength = memoryMessages.length;
   memoryMessages = memoryMessages.filter((m) => m.id !== id);
   return memoryMessages.length < initialLength;
+}
+
+/**
+ * Get summary counters for dashboard cards
+ */
+export async function getContactMessageStats(): Promise<{
+  total: number;
+  unread: number;
+  read: number;
+  replied: number;
+  archived: number;
+}> {
+  const messages = await getContactMessages();
+  return {
+    total: messages.length,
+    unread: messages.filter((m) => m.status === "unread").length,
+    read: messages.filter((m) => m.status === "read").length,
+    replied: messages.filter((m) => m.status === "replied").length,
+    archived: messages.filter((m) => m.status === "archived").length,
+  };
 }
