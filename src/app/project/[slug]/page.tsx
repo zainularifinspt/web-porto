@@ -22,6 +22,7 @@ import { MOCK_PROJECTS } from "@/data/mockProjects";
 import Navbar from "@/components/Navbar";
 import ProjectImageGallery from "@/components/ProjectImageGallery";
 import ProjectStoryAndRole from "@/components/ProjectStoryAndRole";
+import ProjectTechBadges from "@/components/ProjectTechBadges";
 
 interface PageProps {
   params: Promise<{
@@ -200,22 +201,10 @@ export default async function ProjectDetailPage({ params }: PageProps) {
 
           {/* Sidebar Tech Stack & Call-To-Action */}
           <div className="space-y-6">
-            <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/60 p-6 shadow-sm">
-              <h3 className="text-base font-bold font-mono text-zinc-900 dark:text-zinc-100 mb-4 flex items-center gap-2">
-                <Layers className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                Teknologi yang Dipakai
-              </h3>
-              <div className="flex flex-wrap gap-2">
-                {project.technologies.map((tech) => (
-                  <span
-                    key={tech}
-                    className="font-mono text-xs px-3 py-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-950 text-emerald-700 dark:text-emerald-300 border border-zinc-200 dark:border-zinc-800 shadow-sm"
-                  >
-                    {tech}
-                  </span>
-                ))}
-              </div>
-            </div>
+            <ProjectTechBadges
+              technologies={project.technologies}
+              projectTitle={project.title}
+            />
 
             <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-gradient-to-br from-emerald-50/60 to-white dark:from-emerald-950/30 dark:to-zinc-900/60 p-6 shadow-sm">
               <h4 className="font-mono text-sm font-bold text-zinc-900 dark:text-zinc-200 mb-2">
