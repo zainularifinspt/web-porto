@@ -59,40 +59,53 @@ export default function AdminLoginPage() {
     setIsLoading(true);
     setAuthStep("Menghubungkan ke secure auth gateway...");
 
-    await new Promise((resolve) => setTimeout(resolve, 350));
-    setAuthStep("Memvalidasi hash signature kredensial...");
+    try {
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-    await new Promise((resolve) => setTimeout(resolve, 400));
+      setAuthStep("Memvalidasi hash signature kredensial...");
+      await new Promise((resolve) => setTimeout(resolve, 250));
 
-    // Check credentials (accept demo or valid format)
-    const isValid =
-      (email.toLowerCase() === DEMO_EMAIL && password === DEMO_PASSWORD) ||
-      (email.includes("@") && password.length >= 6);
+      const data = await response.json();
 
-    if (!isValid) {
+      if (!response.ok || !data.success) {
+        setIsLoading(false);
+        setAuthStep("");
+        setError(data.error || "Autentikasi gagal. Silakan periksa kredensial.");
+        return;
+      }
+
+      setAuthStep("Membuat token sesi pemilik terverifikasi...");
+      await new Promise((resolve) => setTimeout(resolve, 250));
+
+      // Save auth session info in browser storage
+      try {
+        localStorage.setItem("portfolio_admin_auth", "true");
+        localStorage.setItem("portfolio_admin_user", data.user?.email || email);
+        if (data.token) {
+          localStorage.setItem("portfolio_admin_token", data.token);
+        }
+      } catch {
+        // Storage fallback
+      }
+
+      setIsSuccess(true);
+      setAuthStep("Otorisasi berhasil! Mengalihkan ke dashboard...");
+
+      setTimeout(() => {
+        router.push("/admin");
+      }, 700);
+    } catch {
+      // Offline fallback
       setIsLoading(false);
       setAuthStep("");
-      setError("Kredensial tidak cocok. Silakan gunakan kredensial demo.");
-      return;
+      setError("Gagal terhubung ke gateway autentikasi.");
     }
-
-    setAuthStep("Membuat token sesi pemilik terverifikasi...");
-    await new Promise((resolve) => setTimeout(resolve, 350));
-
-    // Save auth session in browser storage
-    try {
-      localStorage.setItem("portfolio_admin_auth", "true");
-      localStorage.setItem("portfolio_admin_user", email);
-    } catch {
-      // Storage fallback
-    }
-
-    setIsSuccess(true);
-    setAuthStep("Otorisasi berhasil! Mengalihkan ke dashboard...");
-
-    setTimeout(() => {
-      router.push("/admin");
-    }, 800);
   };
 
   return (

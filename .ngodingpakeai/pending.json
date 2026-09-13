@@ -1,6 +1,6 @@
 {
   "repo": "Web Portofolio",
-  "generatedForCommit": "064c18cac9b54f6a91960bd954be1834a02c9aba",
+  "generatedForCommit": "81ce39993d0abf7f350c226f4eee521534fd4ecb",
   "files": [
     {
       "path": ".claude/skills/ngodingpakeai/SKILL.md",
@@ -357,6 +357,12 @@
       "size": 2741
     },
     {
+      "path": "src/db/auth.ts",
+      "reason": "new",
+      "language": "typescript",
+      "size": 4141
+    },
+    {
       "path": "src/db/contact.ts",
       "reason": "needs_summary",
       "language": "typescript",
@@ -366,7 +372,7 @@
       "path": "src/db/index.ts",
       "reason": "changed",
       "language": "typescript",
-      "size": 137
+      "size": 161
     },
     {
       "path": "src/db/migrate.ts",
@@ -406,21 +412,27 @@
     },
     {
       "path": "src/db/migrations/006_complete_projects_schema.sql",
-      "reason": "new",
+      "reason": "needs_summary",
       "language": "sql",
       "size": 939
     },
     {
-      "path": "src/db/projects.ts",
+      "path": "src/db/migrations/007_create_admin_users_schema.sql",
       "reason": "new",
+      "language": "sql",
+      "size": 1672
+    },
+    {
+      "path": "src/db/projects.ts",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 5497
     },
     {
       "path": "src/db/schema.ts",
-      "reason": "needs_summary",
+      "reason": "changed",
       "language": "typescript",
-      "size": 3947
+      "size": 4566
     },
     {
       "path": "src/db/seed.ts",
@@ -466,7 +478,7 @@
     },
     {
       "path": "src/types/project.ts",
-      "reason": "changed",
+      "reason": "needs_summary",
       "language": "typescript",
       "size": 616
     },
