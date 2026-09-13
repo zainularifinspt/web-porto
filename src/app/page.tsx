@@ -1,9 +1,10 @@
 import React from "react";
+import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import HeroTerminal from "@/components/HeroTerminal";
 import ProjectGallery from "@/components/ProjectGallery";
 import { MOCK_PROJECTS } from "@/data/mockProjects";
-import { Terminal, Mail, Cpu, Sparkles } from "lucide-react";
+import { Terminal, Mail, Cpu, Sparkles, ArrowRight } from "lucide-react";
 
 export default function Home() {
   return (
@@ -29,16 +30,26 @@ export default function Home() {
             <p className="text-sm text-zinc-600 dark:text-zinc-400 font-mono leading-relaxed max-w-3xl mb-6">
               Pengembang web yang berdedikasi membangun aplikasi modern dengan arsitektur bersih, performa tinggi, dan pengalaman pengguna yang luar biasa. Berpengalaman di ekosistem TypeScript, Next.js, dan cloud backend.
             </p>
-            <div className="flex flex-wrap gap-2 text-xs font-mono">
-              <span className="px-3 py-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-emerald-600 dark:text-emerald-400 font-medium">
-                ⚡ Full-Stack Developer
-              </span>
-              <span className="px-3 py-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300">
-                🚀 Problem Solver
-              </span>
-              <span className="px-3 py-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300">
-                🛠️ Open Source Enthusiast
-              </span>
+            <div className="flex flex-wrap items-center justify-between gap-4 pt-2">
+              <div className="flex flex-wrap gap-2 text-xs font-mono">
+                <span className="px-3 py-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-emerald-600 dark:text-emerald-400 font-medium">
+                  ⚡ Full-Stack Developer
+                </span>
+                <span className="px-3 py-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300">
+                  🚀 Problem Solver
+                </span>
+                <span className="px-3 py-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300">
+                  🛠️ Open Source Enthusiast
+                </span>
+              </div>
+
+              <Link
+                href="/about"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 dark:bg-emerald-500 dark:hover:bg-emerald-400 text-white dark:text-zinc-950 font-mono font-bold text-xs transition-all shadow-sm"
+              >
+                <span>Lihat Profil Lengkap</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
             </div>
           </div>
         </section>

@@ -32,7 +32,7 @@ export default function Navbar() {
               Galeri Project
             </Link>
             <Link
-              href="/#about"
+              href="/about"
               className="px-3 py-2 rounded-md text-zinc-600 dark:text-zinc-400 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors flex items-center gap-1.5"
             >
               <User className="w-3.5 h-3.5" />
@@ -87,7 +87,7 @@ export default function Navbar() {
             ./galeri-project
           </Link>
           <Link
-            href="/#about"
+            href="/about"
             onClick={() => setIsOpen(false)}
             className="block px-3 py-2 rounded-md text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-900"
           >
