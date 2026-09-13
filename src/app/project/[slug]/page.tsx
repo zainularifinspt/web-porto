@@ -13,10 +13,14 @@ import {
   UserCheck,
   Layers,
   Terminal,
-  Sparkles
+  Sparkles,
+  GitBranch,
+  CheckCircle2,
+  Compass
 } from "lucide-react";
 import { MOCK_PROJECTS } from "@/data/mockProjects";
 import Navbar from "@/components/Navbar";
+import ProjectImageGallery from "@/components/ProjectImageGallery";
 
 interface PageProps {
   params: Promise<{
@@ -61,41 +65,60 @@ export default async function ProjectDetailPage({ params }: PageProps) {
   const nextProject =
     projectIndex < MOCK_PROJECTS.length - 1 ? MOCK_PROJECTS[projectIndex + 1] : null;
 
+  // Prepare images list including thumbnail
+  const allImages = [
+    {
+      id: "img-thumb",
+      projectId: project.id,
+      imageUrl: project.thumbnailUrl,
+      caption: `Pratinjau Utama: ${project.title}`,
+      sortOrder: 0,
+    },
+    ...(project.images || []),
+  ];
+
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 flex flex-col selection:bg-emerald-500 selection:text-zinc-950 transition-colors duration-200">
       <Navbar />
 
-      <main className="flex-1 max-w-5xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-10">
-        {/* Breadcrumb Navigation */}
-        <div className="mb-8 flex items-center justify-between">
+      <main className="flex-1 max-w-5xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-10 space-y-10">
+        {/* Breadcrumb Navigation & Branch info */}
+        <div className="flex flex-wrap items-center justify-between gap-4 font-mono text-xs">
           <Link
             href="/#projects"
-            className="inline-flex items-center gap-2 text-xs font-mono text-zinc-600 dark:text-zinc-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors p-2 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-900 border border-transparent hover:border-zinc-200 dark:hover:border-zinc-800"
+            className="inline-flex items-center gap-2 text-zinc-600 dark:text-zinc-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors p-2 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-900 border border-transparent hover:border-zinc-200 dark:hover:border-zinc-800"
           >
             <ArrowLeft className="w-4 h-4" />
-            cd .. / Kembali ke Galeri Project
+            cd .. / Galeri Project
           </Link>
 
-          <span className="text-xs font-mono text-zinc-500 dark:text-zinc-400 hidden sm:inline-block">
-            ~/portfolio/projects/{project.slug}
-          </span>
+          <div className="flex items-center gap-3 text-zinc-500 dark:text-zinc-400">
+            <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800">
+              <GitBranch className="w-3.5 h-3.5 text-emerald-500" />
+              main@{project.slug.slice(0, 7)}
+            </span>
+            <span className="hidden sm:inline-block">
+              ~/portfolio/projects/{project.slug}.md
+            </span>
+          </div>
         </div>
 
-        {/* Project Header Card */}
-        <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/60 p-6 sm:p-8 backdrop-blur-xl mb-8 shadow-sm dark:shadow-none">
-          <div className="flex flex-wrap items-center gap-2 mb-3">
+        {/* Project Header Banner Card */}
+        <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/70 p-6 sm:p-8 backdrop-blur-xl shadow-sm dark:shadow-2xl">
+          <div className="flex flex-wrap items-center gap-2 mb-4">
             {project.isFeatured && (
-              <span className="flex items-center gap-1 text-xs font-mono font-semibold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/80 border border-emerald-300 dark:border-emerald-700/50 px-2.5 py-1 rounded-full">
+              <span className="flex items-center gap-1.5 text-xs font-mono font-semibold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/80 border border-emerald-300 dark:border-emerald-700/50 px-3 py-1 rounded-full shadow-sm">
                 <Star className="w-3.5 h-3.5 fill-emerald-500 text-emerald-500" />
                 Project Unggulan
               </span>
             )}
-            <span className="text-xs font-mono text-zinc-600 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-800/80 px-2.5 py-1 rounded-full border border-zinc-200 dark:border-zinc-700/50">
-              {project.stats?.status || "Live"}
+            <span className="text-xs font-mono text-zinc-600 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-800/80 px-3 py-1 rounded-full border border-zinc-200 dark:border-zinc-700/50 flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span>
+              {project.stats?.status || "Live in Production"}
             </span>
           </div>
 
-          <h1 className="text-2xl sm:text-4xl font-bold font-mono text-zinc-900 dark:text-zinc-100 mb-4 tracking-tight">
+          <h1 className="text-3xl sm:text-4xl font-bold font-mono text-zinc-900 dark:text-zinc-100 mb-4 tracking-tight">
             {project.title}
           </h1>
 
@@ -103,17 +126,17 @@ export default async function ProjectDetailPage({ params }: PageProps) {
             {project.summary}
           </p>
 
-          {/* Quick Meta Stats */}
+          {/* Quick Meta Grid */}
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-6 border-t border-zinc-200 dark:border-zinc-800/80 text-xs font-mono">
             <div>
               <span className="text-zinc-500 dark:text-zinc-400 block mb-1 flex items-center gap-1.5">
-                <UserCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> Peran
+                <UserCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> Peran Utama
               </span>
               <span className="font-semibold text-zinc-800 dark:text-zinc-200">{project.role}</span>
             </div>
             <div>
               <span className="text-zinc-500 dark:text-zinc-400 block mb-1 flex items-center gap-1.5">
-                <Calendar className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> Waktu Rilis
+                <Calendar className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> Tanggal Rilis
               </span>
               <span className="font-semibold text-zinc-800 dark:text-zinc-200">
                 {new Date(project.createdAt).toLocaleDateString("id-ID", {
@@ -124,25 +147,25 @@ export default async function ProjectDetailPage({ params }: PageProps) {
             </div>
             <div className="col-span-2 sm:col-span-1">
               <span className="text-zinc-500 dark:text-zinc-400 block mb-1 flex items-center gap-1.5">
-                <Layers className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> Teknologi Utama
+                <Layers className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> Total Teknologi
               </span>
               <span className="font-semibold text-zinc-800 dark:text-zinc-200">
-                {project.technologies.slice(0, 3).join(", ")}
+                {project.technologies.length} Stack Terintegrasi
               </span>
             </div>
           </div>
 
           {/* Action Links */}
-          <div className="mt-6 flex flex-wrap items-center gap-3">
+          <div className="mt-8 flex flex-wrap items-center gap-3">
             {project.demoUrl && (
               <a
                 href={project.demoUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 dark:bg-emerald-500 dark:hover:bg-emerald-400 text-white dark:text-zinc-950 font-mono font-bold text-xs transition-all shadow-md shadow-emerald-500/20"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 dark:bg-emerald-500 dark:hover:bg-emerald-400 text-white dark:text-zinc-950 font-mono font-bold text-xs transition-all shadow-lg shadow-emerald-500/20"
               >
                 <ExternalLink className="w-4 h-4" />
-                Kunjungi Live Demo
+                Buka Live Demo
               </a>
             )}
             {project.repoUrl && (
@@ -153,74 +176,66 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-200 font-mono text-xs border border-zinc-200 dark:border-zinc-700 transition-colors"
               >
                 <Code2 className="w-4 h-4" />
-                Lihat Kode Sumber
+                Lihat Repository Kode
               </a>
             )}
           </div>
         </div>
 
-        {/* Thumbnail Hero Image */}
-        <div className="relative aspect-video w-full rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-800 mb-10 shadow-lg dark:shadow-2xl bg-zinc-100 dark:bg-zinc-900">
-          <Image
-            src={project.thumbnailUrl}
-            alt={project.title}
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover"
+        {/* Interactive Screenshot Gallery */}
+        <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/40 p-6 sm:p-8 shadow-sm">
+          <ProjectImageGallery
+            images={allImages}
+            projectTitle={project.title}
           />
         </div>
 
-        {/* Story & Background Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+        {/* Story, Architecture, and Tech Stack Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Main Story & Technical Deep Dive */}
           <div className="lg:col-span-2 space-y-6">
-            <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/40 p-6 sm:p-8 shadow-sm dark:shadow-none">
+            <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/40 p-6 sm:p-8 shadow-sm">
               <h2 className="text-xl font-bold font-mono text-zinc-900 dark:text-zinc-100 flex items-center gap-2 mb-4">
                 <Terminal className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-                Cerita & Tantangan Teknis
+                Cerita &amp; Tantangan Teknis
               </h2>
               <p className="text-zinc-700 dark:text-zinc-300 leading-relaxed whitespace-pre-line text-sm sm:text-base">
                 {project.story}
               </p>
             </div>
 
-            {/* Additional Project Gallery Images */}
-            {project.images && project.images.length > 0 && (
-              <div className="space-y-4">
-                <h3 className="text-lg font-bold font-mono text-zinc-900 dark:text-zinc-200 flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                  Tangkapan Layar & Pratinjau
-                </h3>
-                <div className="grid grid-cols-1 gap-4">
-                  {project.images.map((img) => (
-                    <div
-                      key={img.id}
-                      className="rounded-xl overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-sm"
-                    >
-                      <div className="relative aspect-video w-full">
-                        <Image
-                          src={img.imageUrl}
-                          alt={img.caption || project.title}
-                          fill
-                          sizes="(max-width: 1024px) 100vw, 66vw"
-                          className="object-cover"
-                        />
-                      </div>
-                      {img.caption && (
-                        <div className="p-3 bg-zinc-50 dark:bg-zinc-950/80 border-t border-zinc-200 dark:border-zinc-800/80 text-xs font-mono text-zinc-600 dark:text-zinc-400">
-                          {img.caption}
-                        </div>
-                      )}
-                    </div>
-                  ))}
+            {/* Architecture Highlights */}
+            <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/40 p-6 sm:p-8 shadow-sm">
+              <h3 className="text-base font-bold font-mono text-zinc-900 dark:text-zinc-100 flex items-center gap-2 mb-4">
+                <Compass className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                Solusi Arsitektur &amp; Peran Saya
+              </h3>
+              <div className="space-y-3 font-mono text-xs text-zinc-700 dark:text-zinc-300">
+                <div className="flex items-start gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
+                  <span>
+                    <strong>Desain Sistem:</strong> Merancang arsitektur komponen modular dan pola manajemen state yang decoupled.
+                  </span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
+                  <span>
+                    <strong>Optimasi Kinerja:</strong> Menerapkan caching cerdas, code splitting, dan kompresi aset gambar untuk Core Web Vitals optimal.
+                  </span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
+                  <span>
+                    <strong>Keamanan &amp; Skalabilitas:</strong> Penanganan rate limiting, validasi input berlapis, dan kesiapan deploy edge di Vercel.
+                  </span>
                 </div>
               </div>
-            )}
+            </div>
           </div>
 
-          {/* Sidebar Tech Stack */}
+          {/* Sidebar Tech Stack & Call-To-Action */}
           <div className="space-y-6">
-            <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/60 p-6 shadow-sm dark:shadow-none">
+            <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/60 p-6 shadow-sm">
               <h3 className="text-base font-bold font-mono text-zinc-900 dark:text-zinc-100 mb-4 flex items-center gap-2">
                 <Layers className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                 Teknologi yang Dipakai
@@ -229,7 +244,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                 {project.technologies.map((tech) => (
                   <span
                     key={tech}
-                    className="font-mono text-xs px-3 py-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-950 text-emerald-700 dark:text-emerald-300 border border-zinc-200 dark:border-zinc-800"
+                    className="font-mono text-xs px-3 py-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-950 text-emerald-700 dark:text-emerald-300 border border-zinc-200 dark:border-zinc-800 shadow-sm"
                   >
                     {tech}
                   </span>
@@ -237,16 +252,16 @@ export default async function ProjectDetailPage({ params }: PageProps) {
               </div>
             </div>
 
-            <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-gradient-to-br from-emerald-50/50 to-white dark:from-emerald-950/30 dark:to-zinc-900/60 p-6 shadow-sm dark:shadow-none">
+            <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-gradient-to-br from-emerald-50/60 to-white dark:from-emerald-950/30 dark:to-zinc-900/60 p-6 shadow-sm">
               <h4 className="font-mono text-sm font-bold text-zinc-900 dark:text-zinc-200 mb-2">
-                Tertarik dengan project ini?
+                Ingin Mengembangkan Fitur Serupa?
               </h4>
-              <p className="text-xs text-zinc-600 dark:text-zinc-400 mb-4 leading-relaxed">
-                Mari diskusikan arsitektur serupa atau bagaimana teknologi ini dapat diterapkan di proyek Anda.
+              <p className="text-xs text-zinc-600 dark:text-zinc-400 mb-4 leading-relaxed font-mono">
+                Saya selalu antusias mendiskusikan arsitektur sistem, optimasi performa, atau kolaborasi proyek baru.
               </p>
               <Link
                 href="/#contact"
-                className="inline-block w-full py-2.5 text-center rounded-lg bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-emerald-700 dark:text-emerald-400 font-mono text-xs font-semibold border border-zinc-300 dark:border-zinc-700 transition-colors"
+                className="inline-block w-full py-2.5 text-center rounded-lg bg-emerald-600 hover:bg-emerald-500 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-white dark:text-emerald-400 font-mono text-xs font-semibold border border-transparent dark:border-zinc-700 transition-colors shadow-sm"
               >
                 Hubungi Saya →
               </Link>
