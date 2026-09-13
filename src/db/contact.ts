@@ -60,11 +60,12 @@ const MOCK_MESSAGES: ContactMessageRow[] = [
 let memoryMessages: ContactMessageRow[] = [...MOCK_MESSAGES];
 
 /**
- * Fetch all contact messages with optional filtering
+ * Fetch all contact messages with optional filtering & search
  */
 export async function getContactMessages(filters?: {
   status?: string;
   category?: string;
+  searchQuery?: string;
 }): Promise<ContactMessageRow[]> {
   if (process.env.DATABASE_URL) {
     try {
@@ -85,10 +86,41 @@ export async function getContactMessages(filters?: {
     result = result.filter((m) => m.category === filters.category);
   }
 
+  if (filters?.searchQuery && filters.searchQuery.trim()) {
+    const q = filters.searchQuery.toLowerCase().trim();
+    result = result.filter(
+      (m) =>
+        m.name.toLowerCase().includes(q) ||
+        m.email.toLowerCase().includes(q) ||
+        m.subject.toLowerCase().includes(q) ||
+        m.message.toLowerCase().includes(q)
+    );
+  }
+
   // Sort latest first
   return result.sort(
     (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
   );
+}
+
+/**
+ * Get aggregated statistics of contact messages for owner dashboard
+ */
+export async function getContactMessageStats() {
+  const all = [...memoryMessages];
+  return {
+    total: all.length,
+    unread: all.filter((m) => m.status === "unread").length,
+    read: all.filter((m) => m.status === "read").length,
+    replied: all.filter((m) => m.status === "replied").length,
+    archived: all.filter((m) => m.status === "archived").length,
+    byCategory: {
+      project: all.filter((m) => m.category === "project").length,
+      consultation: all.filter((m) => m.category === "consultation").length,
+      hire: all.filter((m) => m.category === "hire").length,
+      general: all.filter((m) => m.category === "general").length,
+    },
+  };
 }
 
 /**
