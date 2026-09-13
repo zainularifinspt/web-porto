@@ -96,47 +96,53 @@ export default function Navbar() {
 
       {/* Mobile menu dropdown */}
       {isOpen && (
-        <div className="md:hidden border-b border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 px-4 pt-2 pb-4 space-y-2 font-mono text-xs shadow-lg">
+        <div className="md:hidden border-b border-zinc-200 dark:border-zinc-800 bg-white/95 dark:bg-zinc-950/95 backdrop-blur-xl px-4 pt-3 pb-5 space-y-2 font-mono text-xs shadow-2xl animate-in slide-in-from-top-2 duration-200">
           <Link
             href="/#projects"
             onClick={() => setIsOpen(false)}
-            className={`block px-3 py-2 rounded-md ${
+            className={`flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl transition-colors ${
               isHome
-                ? "text-emerald-600 dark:text-emerald-400 bg-zinc-100 dark:bg-zinc-900/80 font-medium"
-                : "text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-900"
+                ? "text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 font-bold"
+                : "text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-900 border border-transparent"
             }`}
           >
-            ./galeri-project
+            <Code className="w-4 h-4 text-emerald-500" />
+            <span>./galeri-project</span>
           </Link>
           <Link
             href="/about"
             onClick={() => setIsOpen(false)}
-            className={`block px-3 py-2 rounded-md ${
+            className={`flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl transition-colors ${
               isAbout
-                ? "text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 font-medium"
-                : "text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-900"
+                ? "text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 font-bold"
+                : "text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-900 border border-transparent"
             }`}
           >
-            ./tentang-saya
+            <User className="w-4 h-4 text-emerald-500" />
+            <span>./tentang-saya</span>
           </Link>
           <Link
             href="/contact"
             onClick={() => setIsOpen(false)}
-            className={`block px-3 py-2 rounded-md ${
+            className={`flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl transition-colors ${
               isContact
-                ? "text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 font-medium"
-                : "text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-900"
+                ? "text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 font-bold"
+                : "text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-900 border border-transparent"
             }`}
           >
-            ./kontak-sosial
+            <Send className="w-4 h-4 text-emerald-500" />
+            <span>./kontak-sosial</span>
           </Link>
-          <Link
-            href="/admin/login"
-            onClick={() => setIsOpen(false)}
-            className="block px-3 py-2 rounded-md text-emerald-600 dark:text-emerald-400 border border-emerald-300 dark:border-emerald-800/60 bg-emerald-50 dark:bg-emerald-950/40 text-center font-semibold"
-          >
-            Masuk Sebagai Pemilik
-          </Link>
+          <div className="pt-2 border-t border-zinc-100 dark:border-zinc-800">
+            <Link
+              href="/admin/login"
+              onClick={() => setIsOpen(false)}
+              className="flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-xl text-emerald-700 dark:text-emerald-400 border border-emerald-300 dark:border-emerald-800/80 bg-emerald-50 dark:bg-emerald-950/40 text-center font-bold"
+            >
+              <ShieldAlert className="w-4 h-4" />
+              <span>Masuk Sebagai Pemilik</span>
+            </Link>
+          </div>
         </div>
       )}
     </nav>
