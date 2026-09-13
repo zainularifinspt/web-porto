@@ -2,11 +2,17 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Terminal, Code, User, Send, Menu, X, ShieldAlert } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
+
+  const isHome = pathname === "/";
+  const isAbout = pathname === "/about";
+  const isContact = pathname === "/contact";
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-zinc-200 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl transition-colors duration-200">
@@ -26,24 +32,36 @@ export default function Navbar() {
           <div className="hidden md:flex items-center space-x-1 font-mono text-xs">
             <Link
               href="/#projects"
-              className="px-3 py-2 rounded-md text-zinc-700 dark:text-zinc-300 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors flex items-center gap-1.5"
+              className={`px-3 py-2 rounded-md transition-colors flex items-center gap-1.5 ${
+                isHome
+                  ? "text-zinc-900 dark:text-zinc-100 font-semibold bg-zinc-100/80 dark:bg-zinc-900/80"
+                  : "text-zinc-600 dark:text-zinc-400 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-zinc-100 dark:hover:bg-zinc-900"
+              }`}
             >
               <Code className="w-3.5 h-3.5 text-emerald-500" />
               Galeri Project
             </Link>
             <Link
               href="/about"
-              className="px-3 py-2 rounded-md text-zinc-600 dark:text-zinc-400 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors flex items-center gap-1.5"
+              className={`px-3 py-2 rounded-md transition-colors flex items-center gap-1.5 ${
+                isAbout
+                  ? "text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 font-semibold"
+                  : "text-zinc-600 dark:text-zinc-400 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-zinc-100 dark:hover:bg-zinc-900"
+              }`}
             >
-              <User className="w-3.5 h-3.5" />
+              <User className="w-3.5 h-3.5 text-emerald-500" />
               Tentang Saya
             </Link>
             <Link
-              href="/#contact"
-              className="px-3 py-2 rounded-md text-zinc-600 dark:text-zinc-400 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors flex items-center gap-1.5"
+              href="/contact"
+              className={`px-3 py-2 rounded-md transition-colors flex items-center gap-1.5 ${
+                isContact
+                  ? "text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 font-semibold"
+                  : "text-zinc-600 dark:text-zinc-400 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-zinc-100 dark:hover:bg-zinc-900"
+              }`}
             >
-              <Send className="w-3.5 h-3.5" />
-              Kontak
+              <Send className="w-3.5 h-3.5 text-emerald-500" />
+              Kontak &amp; Sosial
             </Link>
           </div>
 
@@ -82,23 +100,35 @@ export default function Navbar() {
           <Link
             href="/#projects"
             onClick={() => setIsOpen(false)}
-            className="block px-3 py-2 rounded-md text-emerald-600 dark:text-emerald-400 bg-zinc-100 dark:bg-zinc-900/80 font-medium"
+            className={`block px-3 py-2 rounded-md ${
+              isHome
+                ? "text-emerald-600 dark:text-emerald-400 bg-zinc-100 dark:bg-zinc-900/80 font-medium"
+                : "text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-900"
+            }`}
           >
             ./galeri-project
           </Link>
           <Link
             href="/about"
             onClick={() => setIsOpen(false)}
-            className="block px-3 py-2 rounded-md text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-900"
+            className={`block px-3 py-2 rounded-md ${
+              isAbout
+                ? "text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 font-medium"
+                : "text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-900"
+            }`}
           >
             ./tentang-saya
           </Link>
           <Link
-            href="/#contact"
+            href="/contact"
             onClick={() => setIsOpen(false)}
-            className="block px-3 py-2 rounded-md text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-900"
+            className={`block px-3 py-2 rounded-md ${
+              isContact
+                ? "text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 font-medium"
+                : "text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-900"
+            }`}
           >
-            ./kontak
+            ./kontak-sosial
           </Link>
           <Link
             href="/admin/login"
