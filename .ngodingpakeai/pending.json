@@ -1,0 +1,150 @@
+{
+  "repo": "Web Portofolio",
+  "generatedForCommit": "23d517a6e46fd266a215da221922a6720b18808b",
+  "files": [
+    {
+      "path": ".claude/skills/ngodingpakeai/SKILL.md",
+      "reason": "needs_summary",
+      "language": "markdown",
+      "size": 17863
+    },
+    {
+      "path": ".codex/skills/ngodingpakeai/SKILL.md",
+      "reason": "needs_summary",
+      "language": "markdown",
+      "size": 17863
+    },
+    {
+      "path": ".cursor/skills/ngodingpakeai/SKILL.md",
+      "reason": "needs_summary",
+      "language": "markdown",
+      "size": 17863
+    },
+    {
+      "path": ".gitignore",
+      "reason": "needs_summary",
+      "language": null,
+      "size": 480
+    },
+    {
+      "path": ".ngodingpakeaiignore",
+      "reason": "needs_summary",
+      "language": null,
+      "size": 269
+    },
+    {
+      "path": "AGENTS.md",
+      "reason": "needs_summary",
+      "language": "markdown",
+      "size": 18296
+    },
+    {
+      "path": "README.md",
+      "reason": "needs_summary",
+      "language": "markdown",
+      "size": 1450
+    },
+    {
+      "path": "eslint.config.mjs",
+      "reason": "needs_summary",
+      "language": "javascript",
+      "size": 465
+    },
+    {
+      "path": "next.config.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 236
+    },
+    {
+      "path": "package-lock.json",
+      "reason": "needs_summary",
+      "language": "json",
+      "size": 237948
+    },
+    {
+      "path": "package.json",
+      "reason": "needs_summary",
+      "language": "json",
+      "size": 620
+    },
+    {
+      "path": "postcss.config.mjs",
+      "reason": "needs_summary",
+      "language": "javascript",
+      "size": 94
+    },
+    {
+      "path": "src/app/globals.css",
+      "reason": "needs_summary",
+      "language": "css",
+      "size": 488
+    },
+    {
+      "path": "src/app/layout.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 865
+    },
+    {
+      "path": "src/app/page.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 6333
+    },
+    {
+      "path": "src/app/project/[slug]/page.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 8920
+    },
+    {
+      "path": "src/components/HeroTerminal.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 5119
+    },
+    {
+      "path": "src/components/Navbar.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 5365
+    },
+    {
+      "path": "src/components/ProjectCard.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 7733
+    },
+    {
+      "path": "src/components/ProjectGallery.tsx",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 11327
+    },
+    {
+      "path": "src/data/mockProjects.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 6989
+    },
+    {
+      "path": "src/lib/utils.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 169
+    },
+    {
+      "path": "src/types/project.ts",
+      "reason": "needs_summary",
+      "language": "typescript",
+      "size": 563
+    },
+    {
+      "path": "tsconfig.json",
+      "reason": "needs_summary",
+      "language": "json",
+      "size": 670
+    }
+  ]
+}

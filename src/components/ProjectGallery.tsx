@@ -1,7 +1,20 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { Search, Sparkles, Filter, Terminal, FolderGit2, Star, CheckCircle2 } from "lucide-react";
+import Link from "next/link";
+import {
+  Search,
+  Filter,
+  Terminal,
+  FolderGit2,
+  Star,
+  CheckCircle2,
+  LayoutGrid,
+  List,
+  ExternalLink,
+  Code2,
+  ArrowUpRight
+} from "lucide-react";
 import { Project } from "@/types/project";
 import ProjectCard from "./ProjectCard";
 
@@ -12,6 +25,7 @@ interface ProjectGalleryProps {
 export default function ProjectGallery({ initialProjects }: ProjectGalleryProps) {
   const [activeFilter, setActiveFilter] = useState<"all" | "featured" | string>("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
   // Extract all unique technologies for quick tag filtering
   const allTechnologies = useMemo(() => {
@@ -60,9 +74,9 @@ export default function ProjectGallery({ initialProjects }: ProjectGalleryProps)
   );
 
   return (
-    <section id="projects" className="py-12 md:py-16">
+    <section id="projects" className="py-8 md:py-12 w-full">
       {/* Developer Terminal Control Bar */}
-      <div className="mb-10 rounded-2xl border border-zinc-800 bg-zinc-950/90 shadow-2xl backdrop-blur-md overflow-hidden">
+      <div className="mb-8 rounded-2xl border border-zinc-800 bg-zinc-950/90 shadow-2xl backdrop-blur-md overflow-hidden">
         {/* Terminal Header */}
         <div className="flex items-center justify-between border-b border-zinc-800/80 px-4 py-3 bg-zinc-900/60">
           <div className="flex items-center space-x-2">
@@ -74,7 +88,7 @@ export default function ProjectGallery({ initialProjects }: ProjectGalleryProps)
               zsh — ~/portfolio/projects
             </span>
           </div>
-          <div className="flex items-center gap-2 text-[11px] font-mono text-zinc-400">
+          <div className="flex items-center gap-3 text-[11px] font-mono text-zinc-400">
             <span className="inline-flex items-center gap-1 text-emerald-400 bg-emerald-950/40 px-2 py-0.5 rounded border border-emerald-800/40">
               <CheckCircle2 className="w-3 h-3" />
               git:(main)
@@ -82,6 +96,32 @@ export default function ProjectGallery({ initialProjects }: ProjectGalleryProps)
             <span className="hidden sm:inline-block text-zinc-400">
               {filteredProjects.length} repos loaded
             </span>
+
+            {/* View Mode Switcher */}
+            <div className="flex items-center bg-zinc-900 p-0.5 rounded-lg border border-zinc-800">
+              <button
+                onClick={() => setViewMode("grid")}
+                aria-label="Tampilan Grid"
+                className={`p-1 rounded-md transition-colors ${
+                  viewMode === "grid"
+                    ? "bg-zinc-800 text-emerald-400 shadow-sm"
+                    : "text-zinc-500 hover:text-zinc-300"
+                }`}
+              >
+                <LayoutGrid className="w-3.5 h-3.5" />
+              </button>
+              <button
+                onClick={() => setViewMode("list")}
+                aria-label="Tampilan List"
+                className={`p-1 rounded-md transition-colors ${
+                  viewMode === "list"
+                    ? "bg-zinc-800 text-emerald-400 shadow-sm"
+                    : "text-zinc-500 hover:text-zinc-300"
+                }`}
+              >
+                <List className="w-3.5 h-3.5" />
+              </button>
+            </div>
           </div>
         </div>
 
@@ -89,9 +129,9 @@ export default function ProjectGallery({ initialProjects }: ProjectGalleryProps)
         <div className="p-4 sm:p-6 space-y-4">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             {/* Terminal Prompt Text */}
-            <div className="font-mono text-sm text-zinc-300 flex items-center gap-2">
+            <div className="font-mono text-xs sm:text-sm text-zinc-300 flex items-center gap-2">
               <span className="text-emerald-400 font-bold">$</span>
-              <span className="text-zinc-400">ls -la --filter=</span>
+              <span className="text-zinc-400">ls -la --view={viewMode} --filter=</span>
               <span className="text-emerald-300 font-semibold underline decoration-emerald-500/40">
                 {activeFilter}
               </span>
@@ -165,7 +205,7 @@ export default function ProjectGallery({ initialProjects }: ProjectGalleryProps)
         </div>
       </div>
 
-      {/* Projects Grid Display */}
+      {/* Projects Display */}
       {filteredProjects.length === 0 ? (
         <div className="rounded-2xl border border-zinc-800 bg-zinc-950/60 p-12 text-center">
           <Terminal className="w-12 h-12 text-zinc-600 mx-auto mb-3 opacity-60" />
@@ -185,7 +225,96 @@ export default function ProjectGallery({ initialProjects }: ProjectGalleryProps)
             Reset Filter
           </button>
         </div>
+      ) : viewMode === "list" ? (
+        /* Compact Developer List Mode */
+        <div className="rounded-2xl border border-zinc-800 bg-zinc-950/90 overflow-hidden shadow-xl">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs font-mono">
+              <thead className="border-b border-zinc-800 bg-zinc-900/70 text-zinc-400 uppercase tracking-wider text-[11px]">
+                <tr>
+                  <th className="py-3.5 px-4">Slug / Nama Project</th>
+                  <th className="py-3.5 px-4">Peran</th>
+                  <th className="py-3.5 px-4 hidden md:table-cell">Teknologi</th>
+                  <th className="py-3.5 px-4 text-center">Status</th>
+                  <th className="py-3.5 px-4 text-right">Tindakan</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-zinc-800/60 text-zinc-300">
+                {filteredProjects.map((project) => (
+                  <tr
+                    key={project.id}
+                    className="hover:bg-zinc-900/50 transition-colors group"
+                  >
+                    <td className="py-3.5 px-4 font-semibold text-zinc-100 flex items-center gap-2">
+                      {project.isFeatured && (
+                        <Star className="w-3.5 h-3.5 text-emerald-400 fill-emerald-400 shrink-0" />
+                      )}
+                      <Link
+                        href={`/project/${project.slug}`}
+                        className="hover:text-emerald-400 hover:underline flex items-center gap-1"
+                      >
+                        {project.title}
+                        <ArrowUpRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                      </Link>
+                    </td>
+                    <td className="py-3.5 px-4 text-zinc-400">{project.role}</td>
+                    <td className="py-3.5 px-4 hidden md:table-cell">
+                      <div className="flex flex-wrap gap-1">
+                        {project.technologies.slice(0, 3).map((t) => (
+                          <span
+                            key={t}
+                            className="text-[10px] px-2 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-zinc-400"
+                          >
+                            {t}
+                          </span>
+                        ))}
+                      </div>
+                    </td>
+                    <td className="py-3.5 px-4 text-center">
+                      <span className="inline-block px-2 py-0.5 rounded text-[10px] bg-zinc-800 text-emerald-300 border border-zinc-700">
+                        {project.stats?.status || "Live"}
+                      </span>
+                    </td>
+                    <td className="py-3.5 px-4 text-right">
+                      <div className="flex items-center justify-end gap-2">
+                        {project.demoUrl && (
+                          <a
+                            href={project.demoUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="p-1.5 rounded hover:bg-zinc-800 text-zinc-400 hover:text-emerald-400"
+                            title="Live Demo"
+                          >
+                            <ExternalLink className="w-3.5 h-3.5" />
+                          </a>
+                        )}
+                        {project.repoUrl && (
+                          <a
+                            href={project.repoUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="p-1.5 rounded hover:bg-zinc-800 text-zinc-400 hover:text-emerald-400"
+                            title="Repository"
+                          >
+                            <Code2 className="w-3.5 h-3.5" />
+                          </a>
+                        )}
+                        <Link
+                          href={`/project/${project.slug}`}
+                          className="text-[11px] px-2 py-1 rounded bg-emerald-950/60 border border-emerald-800/40 text-emerald-400 hover:bg-emerald-900/40"
+                        >
+                          Detail
+                        </Link>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
       ) : activeFilter === "all" && !searchQuery ? (
+        /* Responsive Grid Mode with Featured Split */
         <div className="space-y-12">
           {/* Featured Section */}
           {featuredProjects.length > 0 && (
@@ -209,7 +338,8 @@ export default function ProjectGallery({ initialProjects }: ProjectGalleryProps)
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {/* Grid 1-col on mobile, 2-col on tablet, 3-col on desktop */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-fr">
                 {featuredProjects.map((project) => (
                   <ProjectCard key={project.id} project={project} featuredOnly />
                 ))}
@@ -234,7 +364,8 @@ export default function ProjectGallery({ initialProjects }: ProjectGalleryProps)
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {/* Grid 1-col on mobile, 2-col on tablet, 3-col on desktop */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-fr">
                 {otherProjects.map((project) => (
                   <ProjectCard key={project.id} project={project} />
                 ))}
@@ -243,14 +374,14 @@ export default function ProjectGallery({ initialProjects }: ProjectGalleryProps)
           )}
         </div>
       ) : (
-        /* Uniform Grid when filtered or searched */
+        /* Filtered/Searched Grid */
         <div>
           <div className="mb-6 flex items-center justify-between">
             <span className="text-xs font-mono text-zinc-400">
               Menampilkan {filteredProjects.length} project
             </span>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-fr">
             {filteredProjects.map((project) => (
               <ProjectCard key={project.id} project={project} />
             ))}
